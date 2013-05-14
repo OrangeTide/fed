@@ -1,0 +1,850 @@
+#ifdef TARGET_CURSES
+To view a topic, move the cursor to it and then press Ctrl+F.
+Press Ctrl+C to exit from the help system.
+#else
+To view a topic, move the cursor to it and press Ctrl+F, or click on it with 
+the right mouse button and select 'Fold'. Press Ctrl+C to exit from help.
+#endif
+
+Introduction
+   This is version \@ VS3 \@ (\@ TN \@), which was built on \@ __DATE__ \@
+
+   **************************************************************************
+   *                                                                        *
+   *  oooooooooooo oooooooooooo oooooooooo.        .oooo.         .oooo.    *
+   *  `888'     `8 `888'     `8 `888'   `Y8b     .dP""Y88b      .dP""Y88b   *
+   *   888          888          888      888          ]8P'           ]8P'  *
+   *   888oooo8     888oooo8     888      888        .d8P'          .d8P'   *
+   *   888    "     888    "     888      888      .dP'           .dP'      *
+   *   888          888       o  888     d88'    .oP     .o .o. .oP     .o  *
+   *  o888o        o888ooooood8 o888bood8P'      8888888888 Y8P 8888888888  *
+   *                                                                        *
+   **************************************************************************
+
+   By Shawn Hargreaves
+   http://www.talula.demon.co.uk/
+
+   FED is a folding text editor for MS-DOS, Linux, and Windows. It features:
+
+   - fast and intuitive user interface.
+   - color syntax highlighting.
+   - can fold blocks of text out of sight, based on code indentation.
+   - multiple levels of undo and redo.
+   - incremental 'as you type' searching.
+   - search/replace through multiple files.
+   - browse function to quickly find all references to a symbol.
+   - automatic compiler error location.
+   - context-sensitive access to external help systems.
+   - flexible wordwrap, which correctly handles indented blocks of text.
+   - block indent/unindent.
+   - binary and hex editing modes for hacking executable and data files.
+   - record/playback keystroke macros.
+   - built in tetris game and screensaver.
+   - configuration options to alter key bindings, screen colors, etc.
+
+What's new
+   Version 2.23 (November 2006)
+      - Robert Riebisch fixed djgpp compile issue with function pch().
+
+   Version 2.22 (October 2004)
+      - Proper rendering for box UI characters in the Windows version.
+      - Fixed multiprocessor thread race condition in the Windows version.
+      - File open checks FED_INCLUDE as well as INCLUDE in the environment.
+      - Correct syntax highlighting for 1.0f floating point constants.
+      - realtabs option overrides tab mode per file extension.
+
+   Version 2.21 (May 2001)
+      - Drag and drop support in the Windows version.
+
+   Version 2.2 (May 2001)
+      - Windows port.
+      - Tab size can be set differently for each file extension in fed.syn.
+
+   Version 2.16 (January 2000)
+      - Added optional wrap column parameter to the -w switch.
+      - Now understands ~ for home directories in Unix.
+
+   Version 2.15 (June 1999)
+      - Understands Unix-style #! /bin/cmd magic for identifying file types.
+      - Implemented clipboard functions on Unix (using a temp file).
+
+   Version 2.14 (March 1999)
+      - External tools can now be used as filters for transforming text.
+      - Can automatically look in subdirectories when searching for a file.
+      - The wordwrap routine now understands what to do with quoted emails.
+      - Now works properly in an xterm, including shift keys and mouse input.
+      - Numerous bugfixes.
+
+   Version 2.13 (February 1999)
+      - Bugfixes.
+
+   Version 2.12 (February 1999)
+      - Bugfixes.
+
+   Version 2.11 (February 1999)
+      - Ported to use the Allegro library, providing hires 'text' modes.
+      - Bugfixes.
+
+   Version 2.1 (February 1999)
+      - Ported to Linux, using the Curses package.
+      - Added functions to communicate with the Windows clipboard.
+      - When run under Windows, the title now reflects the current filename.
+      - Released source code under the GPL.
+
+   Version 2.06 (September 1997)
+      - Support for 'real' tab characters
+
+   Version 2.05 (March 1997)
+      - Pressing ALT-GR no longer activates the dropdown menu system
+
+   Version 2.04 (December 1996)
+      - Supports mixed case filenames when run under win95
+
+   Version 2.03 (October 1996)
+      - Checks for files being modified by external programs (eg. sourcesafe)
+      - Optional help banner at foot of screen (from fed.msg)
+
+   Version 2.02 (July 1996)
+      - support for Unix style (LF, rather than CR/LF) text files
+      - adjustable tab size for reading/writing files
+      - supports win95 long filenames
+
+   Version 2.01 (March 1996)
+      - fixed several bugs in the syntax highlighting routines
+      - the tool menu configuration can now contain upper case characters
+
+   Version 2.0 (September 1995)
+      - totally revamped user interface
+      - undo/redo
+      - syntax highlighting
+      - browse function
+      - improved wordwrap
+      - keyword searching mode
+      - more flexible block operations
+      - integrated configuration editor
+      - bookmarks
+      - hex mode
+      - tools menu
+      - port from 16-bit to 32-bit protected mode
+      - dropped the Atari ST version
+      - etc (lots of changes not worth listing here)
+
+   Version 1.1 (April 1995)
+      - Now using the 32 bit djgpp compiler.
+
+   Version 1.01 (October 1994)
+      - Port to DOS, using 16 bit Borland C.
+
+   Version 1.0 (July 1994)
+      - Original Atari version, using Mark Williams C.
+
+Copyright
+   FED is copyright Shawn Hargreaves, \@ DS2 \@.
+
+   This program is free, open-source software. It can be redistributed 
+   and/or modified under the terms of the GNU General Public License as 
+   published by the Free Software Foundation, either version 2 of the 
+   License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful, but 
+   WITHOUT ANY WARRANTY, without even the implied warranty of 
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+   Public License for more details.
+
+   You should have received a copy of the GNU General Public License along 
+   with this program in the file COPYING, if not, write to the Free Software 
+   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+Command line options
+   fed <file>        Open <file> (the name may contain wildcards)
+   fed -a            Open next file in normal ascii mode
+   fed -b            Open next file in binary mode
+   fed -e            Use next file as an error list
+   fed -f            Automatically fold the next file
+   fed -g<line>      Go to the specified line number
+   fed -h            Open next file in hex edit mode
+   fed -i            Open next file in autoindent mode
+   fed -r            Open next file in read-only mode
+   fed -s<ext>       Sets the file extension for syntax highlighting
+   fed -t<size>      Set the tab size
+   fed -w[col]       Open next file in wordwrap mode
+   fed ?<text>       Browse for the string <text>
+ #if (!defined TARGET_CURSES) && (!defined TARGET_WIN)
+   fed -<lines>      Set the number of screen lines
+ #endif
+   fed -?            Display a list of commandline options
+
+User interface
+ #ifdef TARGET_CURSES
+   To access the pull-down menus, press Esc followed by an initial (eg. 
+   Esc+F for the 'File' menu), or move the mouse to the top of the screen 
+   and click the middle mouse button.
+ #else
+   To access the pull-down menus, move the mouse to the top of the screen 
+   and click on a menu, or press alt followed by an initial (eg. alt+F for 
+   the 'File' menu).
+ #endif
+
+   Throughout the interface items can be selected by using the arrow keys 
+   and pressing Enter, or by double clicking on them, and menus can be 
+   cancelled by pressing Esc, clicking the right mouse button, or clicking 
+   on the background of the screen outside the menu.
+
+ #ifndef TARGET_CURSES
+   If you move the mouse over to the right of the screen a scroll bar will 
+   appear, which you can use to quickly navigate through a file.
+
+   Double-clicking on the text performs a function that is set in the 
+   'Config/Options' box. By default it selects the word under the mouse 
+   pointer. 
+
+ #endif
+   Clicking the right mouse button summons a popup menu containing various 
+   functions that are set in the 'Config/Options' box. By default this 
+   contains 'Cut' and 'Copy' if a block of text is selected, 'Fold' if you 
+   clicked on a line which can be folded, 'Browse' and 'Info' if you clicked 
+   on a valid word for these functions, 'Match brace' if you clicked on a 
+   brace character, and 'Open' if you clicked on a filename string.
+
+Selecting text
+   You can select blocks of text by clicking and dragging with the mouse, or 
+   by holding down shift while using the cursor movement keys. Pressing Esc 
+   will cancel an unwanted selection.
+
+   After marking a block, you can use Tab and Backspace to indent or 
+   unindent all the selected text. Typing in new characters will cut the 
+   selection to the kill buffer before the new data is inserted.
+
+Files
+   'Open' - ctrl+O
+      Opens a file, which you can select by either typing in a filename or 
+      double-clicking with the mouse. If the file is already open FED will 
+      switch to it rather than opening a second copy. You can open multiple 
+      files by providing a wildcard file specification.
+
+      As you type in a name FED will attempt to match it with the files on 
+      the disk. Press Tab to accept the match. 
+
+      If there is a filename under the cursor when you select the open 
+      command (eg. #include "stdio.h"), this name will be used as the 
+      default for the file selector. FED will attempt to locate the file 
+      both in the current directory and using the INCLUDE environment 
+      variable, so you should set INCLUDE to the directory that contains 
+      your system header files.
+
+   #ifdef TARGET_CURSES
+      If you close the file selector with alt+Enter rather than just Enter, 
+   #else
+      If you close the file selector with ctrl+Enter rather than just Enter, 
+   #endif
+      you will be asked whether to open the file in text, binary or hex mode.
+
+      In binary mode, TAB, CR and LF are treated as normal characters rather 
+      than being used to format the text. The file can be edited as usual, 
+      but the layout of the data on the screen is purely visual since a 
+      CR/LF is not added to the end of each line when it is saved or printed.
+
+      In hex mode, each byte is converted to a pair of hex digits when the 
+      file is read, and these are converted back to binary data when it is 
+      saved.
+
+   'Close' - ctrl+C
+      Closes the current file, asking for confirmation if it has changed.
+
+ #if (!defined TARGET_CURSES) && (!defined TARGET_WIN)
+   'Print' - ctrl+P
+ #else
+   'Print'
+ #endif
+      Prints the current file.
+
+   'View files' - ctrl+V
+      Displays a list of all open files, and allows you to switch to one. If 
+      an asterisk is displayed by a file, it has been altered since the last 
+      save.
+
+   'Next file' - ctrl+N
+      Switches to the next open file. Repeatedly pressing ctrl+N without 
+      releasing the ctrl key allows you to step through several files.
+
+   'Quit' - ctrl+Q
+      Quits from FED, asking for confirmation if any files have been changed.
+
+   'Save and quit' - ctrl+Z
+      Saves all modified files and then quits from FED.
+
+The kill buffer
+   The kill buffer is a special file (called "kill") which is used by the 
+   cut, copy and paste routines, although you can also switch to it and edit 
+   it manually if you want. Whenever you cut text from a file, it is moved 
+   into the kill buffer. Normally it overwrites the contents of the buffer, 
+   but if you perform several identical cut commands without moving the 
+   cursor, it is appended instead. If you select a block of text before 
+   performing a cut, the entire block will be deleted.
+
+   'Cut' - ctrl+X
+      Cuts the current line (or marked block).
+
+   ctrl+D:
+      Cuts the word to the right of the cursor (or marked block).
+
+   ctrl+K:
+      Cuts from the cursor to the end of the line (or marked block).
+
+   'Copy' - F9
+      Copies the selected block of text into the kill buffer.
+
+   'Paste' - ctrl+Y
+      Inserts text from the kill buffer into the document. If a block of 
+      text is selected it will be replaced with the contents of the kill 
+      buffer.
+
+ #ifdef TARGET_DJGPP
+   'Clipboard Cut' - altgr+X
+      Cuts the marked block to both the internal kill buffer and the system 
+      clipboard.
+
+   'Clipboard Copy' - altgr+C or ctrl+F9
+ #else
+   'Clipboard Copy' - ctrl+F9
+ #endif
+      Copies the marked block to both the internal kill buffer and the 
+      system clipboard.
+
+ #ifdef TARGET_DJGPP
+   'Clipboard Paste' - altgr+V or ctrl+F10
+ #else
+   'Clipboard Paste' - ctrl+F10
+ #endif
+      Pastes from the system clipboard into both the internal kill buffer 
+      and the current document.
+
+Editing commands
+ #ifdef TARGET_CURSES
+   'Undo' - ctrl+\\
+ #else
+   'Undo' - ctrl+Backspace
+ #endif
+      Undoes the most recent alteration. The number of things which can be 
+      undone is set in the 'Config/Options' box (the default is 16 actions). 
+      Very large block cut/paste operations may overflow the undo buffer 
+      limit, so they cannot be undone.
+
+   'Redo' - F10
+      Redoes a previously undone action.
+
+   'Lower case' - ctrl+L
+      Converts the word to the right of the cursor to lower case.
+
+   'Upper case' - ctrl+U
+      Converts the word to the right of the cursor to upper case.
+
+ #if (defined TARGET_CURSES) || (defined TARGET_WIN)
+   'Binary char' - ctrl+Insert
+ #else
+   'Binary char' - ctrl+I
+ #endif
+      Inserts an extended ascii character, which you can select with the 
+      mouse, the arrow keys, or by typing a two digit hex number.
+
+   'Transpose' - ctrl+T
+      Swaps the two characters under the cursor.
+
+   'Auto indent' - ctrl+A
+      Toggles automatic indentation on or off.
+
+   'Wordwrap' - F5
+      Sets the wordwrap column (set it to 0 to turn wordwrap off). FED will 
+      only wordwrap lines that have a trailing space, which works fine if 
+      you just type in text and let it wrap at the end of the line, but 
+      means you have to be careful not to accidentally delete the space.
+
+   'Reformat' - ctrl+R
+      Forces an immediate reformat of the current line (does nothing if 
+      wordwrap is turned off).
+
+Cursor position
+   'Info display' - F2
+      Displays the number of lines, words, characters, and bytes in the 
+      file, the current cursor position, and the hex and decimal values of 
+      the character under the cursor.
+
+   'Goto line' - ctrl+G
+      Moves the cursor to a specified line number in the file.
+
+   'Remember position' - F8
+      Stores the cursor location and the name of the file being edited, so 
+      you can later return to the position.
+
+   'Last position' - ctrl+F8
+      Returns to a previously stored location.
+
+ #if (defined TARGET_CURSES) || (defined TARGET_WIN)
+   'Match brace' - ctrl+P
+ #else
+   'Match brace' - ctrl+M
+ #endif
+      Finds the brace matching the one under the cursor.
+
+Searching
+   'Search/replace' - ctrl+S
+      Performs a search using the mode set by the 'Config/Search mode' 
+      command. FED searches incrementally, which means that it attempts to 
+      find a string matching the search pattern as you type it in. You can 
+      press backspace if you make a mistake, and use the left and right (or 
+      up and down) arrow keys to skip to the next or previous occurrence of 
+      the string. To repeat the previous search, press Enter or the 
+      right/down arrow key without typing a search string. To search for the 
+      word beneath the cursor, press ctrl+S a second time once you are in 
+      search mode. To exit from search mode, press Esc or Enter.
+
+      To do a search and replace, after you have entered the search string 
+      press ctrl+R. FED will prompt for the replace string, and then work 
+      through the file prompting before each replacement is made. Press 'y', 
+   #ifdef TARGET_CURSES
+      Space or Enter to make the replacement, or alt+Enter to replace all 
+   #else
+      Space or Enter to make the replacement, or ctrl+Enter to replace all 
+   #endif
+      occurrences. To skip past a match, press 'n' or use the arrow keys.
+
+ #if (!defined TARGET_CURSES) && (!defined TARGET_WIN)
+   'File grep' - numeric keypad '*'
+ #else
+   'File grep'
+ #endif
+      This is exactly like a normal search/replace except that FED will 
+      prompt you to enter a wildcard file specification, and will then load 
+      and search/replace through all the files matching the specification.
+
+Browsing
+   A browser file is a special file containing a list of filenames and line 
+   numbers, which you can move through with the 'Next' and 'Previous' 
+   commands. Browse files are produced by the 'Browse' search command and 
+   some of the commands in the 'Tools' menu (providing automatic compiler 
+   error location). You can also directly specify a browser file with the -e 
+   command line option.
+
+   'Browse' - ctrl+B
+      Searches for all occurrences of the word under the cursor, prompting 
+      you for the browse string if there is nothing under the cursor, and 
+      writing the results into a browser file called "browse". This command 
+      uses the keyword based search mode, and will search through all the 
+      files that are currently loaded (see 'Config/Options/Browse files' for 
+      an explanation of how FED can automatically load the files you want to 
+      search).
+
+ #if (defined TARGET_CURSES) || (defined TARGET_WIN)
+   'Next (browse)' - ctrl+down
+ #else
+   'Next (browse)' - numeric keypad '+'
+ #endif
+      Goes to the next entry in the browser file. Displays a message in the 
+      format:
+
+	    Name of the file
+	      |
+       Current|browse entry   Browse string or error message
+	 |    |                |
+      ---+----+----------------+------
+      | [x/y] filename.ext:l: <text> |
+      -----+---------------+----------
+	   |               |
+	 Total entries   Line number within the file
+
+ #if (defined TARGET_CURSES) || (defined TARGET_WIN)
+   'Previous (browse)' - ctrl+up
+ #else
+   'Previous (browse)' - numeric keypad '-'
+ #endif
+      Goes to the previous entry in the browser file.
+
+Folding
+   This is a feature which allows a section of text to be 'folded' away out 
+   of sight and replaced on the display by a single line displayed in a 
+   different color (default red). All of the editing functions work across 
+   folds, for example cutting a folded line will delete all of the text 
+   within the fold.
+
+   'Fold' - ctrl+F
+      If a block of text is selected this will fold the block, otherwise it 
+      will make or remove a fold starting at the current line. The size of 
+      the fold is determined by the indentation of the text. FED will 
+      correctly fold most C, C++ and Pascal code, although occasional 
+      problems may be caused by erratic indentation. 
+
+   'Expand/collapse' - ctrl+E
+      If there are any folds in the current file this removes them, 
+      otherwise it folds the entire contents of the file.
+
+Misc
+ #if (defined TARGET_CURSES) || (defined TARGET_WIN)
+   'Macro record' - ctrl+]
+ #else
+   'Macro record' - ctrl+[
+ #endif
+      Starts recording your keystrokes (you can't record mouse movements).
+
+   'Stop recording' - ctrl+]
+      Stops the recording.
+
+ #ifdef TARGET_CURSES
+   'Play macro' - alt+Enter
+ #else
+   'Play macro' - ctrl+Enter
+ #endif
+      Plays back a previously recorded keystrokes sequence.
+
+   'Repeat command' - ctrl+F4
+      Repeats the last command a specified number of times. Not all commands 
+      can be repeated.
+
+Tools
+   This menu contains various external tools, which can be set in the 
+   'Config/Options/Edit tools menu' box. The default settings are:
+
+   'Run command' - F3
+      Prompts you for an external command and then runs it.
+
+ #ifndef TARGET_CURSES
+   'DOS shell' - ctrl+F3
+      Brings up a DOS command prompt. Type 'exit' to return to FED.
+ #else
+   'Shell' - ctrl+F3
+      Brings up your command line prompt.
+ #endif
+
+   'Make' - F7
+ #ifdef TARGET_DJGPP
+      Set up for djgpp v2, this runs make.exe, using the redir utility to 
+      provide automatic error location.
+ #else
+      Invokes make in the current directory, redirecting the output to 
+      provide automatic error location.
+ #endif
+
+   'Compile' - ctrl+F7
+ #ifdef TARGET_DJGPP
+      Set up for djgpp v2, this runs gcc on the file that is currently being 
+      edited, using the redir utility to provide automatic error location.
+ #else
+      Runs gcc on the file that is currently being edited, redirecting the 
+      output to provide automatic error location.
+ #endif
+
+ #ifndef TARGET_CURSES
+   'Info (libc)' - ctrl+H
+      Uses the gnu Info program to provide context sensitive help on the C 
+      runtime library function under the cursor. If there is nothing under 
+      the cursor, it prompts you for a function name.
+ #else
+   'Info' - ctrl+F1
+      Invokes the Info program to provide context sensitive help on the 
+      function under the cursor. If there is nothing under the cursor, it 
+      prompts you for a function name.
+ #endif
+
+   'Filter' - F4
+      Uses an external text filter program to transform the selected text.
+
+   After running an external tool, FED checks to see if there is a file 
+   called "_errors_" in the current directory. If there is, it uses it as a 
+   browser file. To provide automatic error location, you should set up the 
+   tool to redirect error messages into this file. FED should be able to 
+   make sense of most error output: if you have problems send me a copy of 
+   the output you are trying to process and I will see what I can do.
+
+   To alter the contents of the 'Tools' menu, change the strings in the 
+   'Config/Options/Edit tools menu' box. The format of a tool definition is 
+   <name>|<cmd>, where <name> is the string to put in the menu and <cmd> is 
+   the command to execute when it is selected. The command can contain 
+   various special tokens:
+      %eVAR%   - replaced by the value of the environment variable VAR
+      %f       - replaced by the name of the file currently being edited
+      %h       - suppresses the <press a key> prompt after the command
+      %n       - use the tool as a stdin/stdout filter for transforming text
+      %N       - transform text from the file _in_ and write it to _out_
+      %p       - prompts the user for a string, and inserts it
+      %s       - suppresses saving altered files before running the command
+      %w       - replaced by the word under the cursor (prompts if no word)
+
+Config
+ #if (!defined TARGET_CURSES) && (!defined TARGET_WIN)
+   'Display mode'
+      Changes the display mode.
+
+ #endif
+   'Search mode' - F6
+      Changes the search mode between relaxed ("ABC" matches "abc" and 
+      "subABCstrings"), case sensitive ("ABC" matches "subABCstrings" but 
+      not "abc") and keyword ("ABC" does not match "abc" or "subABCstrings").
+
+   'Tab size'
+      Alters the tab size. The default is 4 spaces.
+
+   'Options'
+      Alters various configuration options:
+
+      'Screen display options'
+	 'Display comments'
+	    If set, comments explaining each command are displayed at the 
+	    bottom of the screen as you move through the menus.
+
+	 'Display cursor position'
+	    If set, information about the current file and cursor position 
+	    is displayed at the bottom of the screen, in the format:
+
+		   DOS or Unix text format          Character under cursor
+		     |                                 | (hex)
+		 Auto|indent is on       Cursor line   |
+		   | |                     |           |
+	       ----+-+---------------------+-----------+--------
+	       | * awd filename.ext - line l - col c - ch (ch) |
+	       --+--+--+---------------------------+-------+----
+		 |  |  |                           |       |
+		File|is|changed             Cursor column  |
+		    |  |                                   | (decimal)
+	       Wordwrap|is on                       Character under cursor
+		       |
+		     Name of the file
+
+	 'Display menu bar'
+	    If set, the menus are always visible, rather than only appearing 
+	    when you move the mouse to the top of the screen or press alt.
+
+	 'Display scroll bar'
+	    If set, the scroll bar is always visible, rather than only 
+	    appearing when you move the mouse to the right of the screen.
+
+      'Edit tools menu'
+	 Customises the tools menu. See the 'Tools' topic for details.
+
+      'Edit right click menu'
+	 Customises the popup menu that appears when you click the right 
+	 mouse button. You can specify up to 16 functions to include in the 
+	 menu, although which ones appear at any given time will depend on 
+	 the context in which the right button is clicked.
+
+      'Double click function'
+	 This is the function that is executed when the left mouse button is 
+	 double-clicked (by default 'select word'). You can change it to 
+	 anything you like, eg. 'fold' or 'info'.
+
+      'Auto fold files'
+      'Auto indent files'
+      'Binary files'
+      'Hex mode files'
+	 Information about which file types to open in various modes.
+
+      'Browse files'
+	 The browse command only searches through the files that are 
+	 currently loaded into memory. To save you having to manually load 
+	 all the files that you want to search, when you do a browse FED 
+	 will automatically load every file in the current directory that 
+	 matches these extensions.
+
+      'Wordwrap files'
+	 Files with these extensions will be loaded with wordwrap turned on.
+
+      'Wrap at column'
+	 The default column at which to wordwrap.
+
+      'Use big cursor'
+	 If set, a solid cursor is displayed.
+
+      'Make backups'
+	 If set, whenever you save a file the old version is renamed to 
+	 *.bak. Even if this is not set the old version is kept with a .bak 
+	 extension while the file is being saved, so it can be recovered if 
+	 the save fails.
+
+      'Check for changed files'
+	 If set, after running an external tool, and periodically in the 
+	 background, FED will check whether any of the open files have been 
+	 changed by external programs (for example a source control system). 
+	 If anything has altered, you will be asked whether you want to 
+	 reload it.
+
+      'Strip spaces on save'
+	 If set, trailing spaces are removed and multiple spaces are 
+	 replaced with tabs when files are saved.
+
+      'Print only ascii chars'
+	 If set, extended ascii characters (less than 32 and greater than 
+	 126) are replaced with spaces during printing.
+
+      'External tab size'
+	 Internally, FED treats tabs as a series of spaces. When loading and 
+	 saving files it converts between spaces and tabs as appropriate. 
+	 This option allows you to set the tab size used in external text 
+	 files. It defaults to 8, which is the normal size of an ascii tab, 
+	 but you may need to alter it in order for files formatted with a 
+	 different tab size to be displayed correctly.
+
+      'Screensaver delay (mins)'
+	 FED has a built-in screensaver. This is the delay before it kicks 
+	 in. Set it to zero to turn the screensaver off.
+
+      'Undo levels'
+	 The number of operations which are stored in the undo list (default 
+	 16). This is local to each file, rather than shared between all 
+	 open files.
+
+   'Colors'
+      Alter the colors used for normal, selected, and folded text, for the 
+      user interface, and for the color syntax highlighting. The language 
+      specific syntax highlighting information is in fed.syn. Feel free to 
+      edit this, or to contact me if you have any problems getting specific 
+      languages to work. I haven't done much testing with anything except C, 
+      C++, and 8086 asm, so I would appreciate any information you have 
+      about other languages.
+
+   'Key mapping'
+      Alter the control keys used by FED. Press the key that you wish to 
+      remap, and then select the function that you want it to trigger. Be 
+      warned: if you remap a regular key such as 'a' or Space, you won't be 
+      able to type that character into your files.
+
+   'Save config'
+      Saves the current configuration into fed.cfg. If you don't do this, 
+      whatever configuration changes you have made will be lost when you 
+      quit from FED. If you ever want to return to the default 
+      configuration, just delete fed.cfg.
+
+Help
+   'HELP!' - F1
+      Displays this file.
+
+ #if (!defined TARGET_CURSES) && (!defined TARGET_WIN)
+   'Relax...' - ctrl+J
+ #else
+   'Relax...'
+ #endif
+      I'm not going to start explaining how to play tetris. Use the arrow 
+      keys, ok? And the space bar...
+
+   'About FED'
+      Displays the about box.
+
+ #ifdef TARGET_DJGPP
+CWSDPMI
+   FED is a 32 bit program, and needs a DPMI (Dos Protected Mode Interface) 
+   server to access the protected mode features of the 386. This can be 
+   provided by an operating system like Windows or OS/2, a memory manager 
+   like QEMM or 386MAX, or if you don't have any of these, by CWSDPMI, a 
+   free program by Charles Sandmann. To use CWSDPMI, just put it in one of 
+   the directories in your path. FED will load it automatically if no other 
+   DPMI servers are running.
+
+   If you want to get hold of the source code for CWSDPMI, it is available 
+   from any djgpp v2 distribution site (see http://www.delorie.com/djgpp/).
+
+   While I'm here, I'd like to say a big thank you to Charles Sandmann,
+   DJ Delorie, the rest of the djgpp development team, all the cool people 
+   at GNU, and anyone else who thinks they deserve thanking. DJGPP is a 
+   seriously great compiler.
+
+ #endif
+Key reference
+   Left arrow           move left
+   Right arrow          move right
+   Up arrow             move up
+   Down arrow           move down
+   Home                 go to the start of the line
+   End                  go to the end of the line
+   Page up              move up a screen
+   Page down            move down a screen
+   ctrl+Left arrow      move a word to the left
+   ctrl+Right arrow     move a word to the right
+   ctrl+Home            go to the top of the file
+   ctrl+End             go to the end of the file
+   Insert               toggle insert/overwrite mode
+   ctrl+O               open file
+   ctrl+C               close file
+ #if (!defined TARGET_CURSES) && (!defined TARGET_WIN)
+   ctrl+P               print
+ #endif
+   ctrl+V               view files
+   ctrl+N               next file
+   ctrl+Q               quit
+   ctrl+Z               save and quit
+   ctrl+X               cut line (or marked block)
+   ctrl+D               cut word (or marked block)
+   ctrl+K               cut to end of line (or marked block)
+   F9                   copy
+   ctrl+Y               paste
+ #ifdef TARGET_DJGPP
+   altgr+X              clipboard cut
+   altgr+C              clipboard copy
+   altgr+X              clipboard paste
+ #endif
+   ctrl+F9              clipboard copy
+   ctrl+F10             clipboard paste
+ #ifdef TARGET_CURSES
+   ctrl+\\               undo
+ #else
+   ctrl+Backspace       undo
+ #endif
+   F10                  redo
+   ctrl+L               lower case word
+   ctrl+U               upper case word
+ #if (defined TARGET_CURSES) || (defined TARGET_WIN)
+   ctrl+Insert          insert binary character
+ #else
+   ctrl+I               insert binary character
+ #endif
+   ctrl+T               transpose two characters
+   ctrl+A               auto indent
+   F5                   set wordwrap column
+   ctrl+R               reformat
+   F2                   info display
+   ctrl+G               goto line
+   F8                   remember position
+   ctrl+F8              last position
+ #if (defined TARGET_CURSES) || (defined TARGET_WIN)
+   ctrl+P               match brace
+ #else
+   ctrl+M               match brace
+ #endif
+   ctrl+S               search/replace
+ #if (!defined TARGET_CURSES) && (!defined TARGET_WIN)
+   numeric keypad '*'   file grep
+ #endif
+   ctrl+B               browse
+ #if (defined TARGET_CURSES) || (defined TARGET_WIN)
+   ctrl+down            next (browse)
+   ctrl+up              previous (browse)
+ #else
+   numeric keypad '+'   next (browse)
+   numeric keypad '-'   previous (browse)
+ #endif
+   ctrl+F               fold
+   ctrl+E               expand/collapse all folds
+ #if (defined TARGET_CURSES) || (defined TARGET_WIN)
+   ctrl+]               toggle macro record on/off
+ #else
+   ctrl+[               start macro record
+   ctrl+]               stop recording
+ #endif
+ #ifdef TARGET_CURSES
+   alt+Enter            play macro
+ #else
+   ctrl+Enter           play macro
+ #endif
+   ctrl+F4              repeat last command
+   F3                   run external command
+   ctrl+F3              dos shell
+   F7                   make
+   ctrl+F7              compile
+ #if (defined TARGET_CURSES) || (defined TARGET_WIN)
+   ctrl+F1              info
+ #else
+   ctrl+H               info
+ #endif
+   F4                   run text filter
+   F6                   set search mode
+   F1                   help!
+ #if (!defined TARGET_CURSES) && (!defined TARGET_WIN)
+   ctrl+J               relax...
+ #endif
+
