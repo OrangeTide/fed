@@ -76,7 +76,7 @@ void pch(int c);
 void pch(unsigned char c);
 #endif
 
-void mywrite(unsigned char *s);
+void mywrite(char *s);
 void del_to_eol();
 void cr_scroll();
 void screen_block(int s_s, int s_o, int s_g, int d_s, int d_o, int d_g, int w, int h);

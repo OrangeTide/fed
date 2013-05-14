@@ -466,13 +466,13 @@ LISTBOX helpmenu =
 
 LISTITEM menu_s[7] =
 {
-   { "File",    (int)&filemenu,   recursive_menu_proc, NULL, NULL },
-   { "Edit",    (int)&editmenu,   recursive_menu_proc, NULL, NULL },
-   { "Search",  (int)&searchmenu, recursive_menu_proc, NULL, NULL },
-   { "Misc",    (int)&miscmenu,   recursive_menu_proc, NULL, NULL },
-   { "Tools",   (int)&toolmenu,   recursive_menu_proc, NULL, NULL },
-   { "Config",  (int)&configmenu, recursive_menu_proc, NULL, NULL },
-   { "Help",    (int)&helpmenu,   recursive_menu_proc, NULL, NULL },
+   { "File",    (intptr_t)&filemenu,   recursive_menu_proc, NULL, NULL },
+   { "Edit",    (intptr_t)&editmenu,   recursive_menu_proc, NULL, NULL },
+   { "Search",  (intptr_t)&searchmenu, recursive_menu_proc, NULL, NULL },
+   { "Misc",    (intptr_t)&miscmenu,   recursive_menu_proc, NULL, NULL },
+   { "Tools",   (intptr_t)&toolmenu,   recursive_menu_proc, NULL, NULL },
+   { "Config",  (intptr_t)&configmenu, recursive_menu_proc, NULL, NULL },
+   { "Help",    (intptr_t)&helpmenu,   recursive_menu_proc, NULL, NULL },
 };
 
 
@@ -580,29 +580,29 @@ void funcdraw_proc(int w, LISTBOX *lb, LISTITEM *li)
 
 LISTITEM rightmenubox_s[16] =
 {
-   { "Function 1", (int)&config.right_menu[0],  funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 2", (int)&config.right_menu[1],  funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 3", (int)&config.right_menu[2],  funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 4", (int)&config.right_menu[3],  funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 5", (int)&config.right_menu[4],  funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 6", (int)&config.right_menu[5],  funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 7", (int)&config.right_menu[6],  funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 8", (int)&config.right_menu[7],  funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 9", (int)&config.right_menu[8],  funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 10", (int)&config.right_menu[9],  funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 11", (int)&config.right_menu[10], funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 12", (int)&config.right_menu[11], funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 13", (int)&config.right_menu[12], funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 14", (int)&config.right_menu[13], funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 15", (int)&config.right_menu[14], funcclick_proc,   funcdraw_proc, NULL },
-   { "Function 16", (int)&config.right_menu[15], funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 1", (intptr_t)&config.right_menu[0],  funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 2", (intptr_t)&config.right_menu[1],  funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 3", (intptr_t)&config.right_menu[2],  funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 4", (intptr_t)&config.right_menu[3],  funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 5", (intptr_t)&config.right_menu[4],  funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 6", (intptr_t)&config.right_menu[5],  funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 7", (intptr_t)&config.right_menu[6],  funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 8", (intptr_t)&config.right_menu[7],  funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 9", (intptr_t)&config.right_menu[8],  funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 10", (intptr_t)&config.right_menu[9],  funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 11", (intptr_t)&config.right_menu[10], funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 12", (intptr_t)&config.right_menu[11], funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 13", (intptr_t)&config.right_menu[12], funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 14", (intptr_t)&config.right_menu[13], funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 15", (intptr_t)&config.right_menu[14], funcclick_proc,   funcdraw_proc, NULL },
+   { "Function 16", (intptr_t)&config.right_menu[15], funcclick_proc,   funcdraw_proc, NULL },
 };
 
 
 
 LISTBOX rightmenubox =
 {
-   NULL, 
+   NULL,
    "Edit right click menu",
    15, 2,               /* x, y */
    48, 20,              /* w, h */
@@ -660,7 +660,7 @@ LISTBOX popup =
    0,                      /* count */
    0, 0,
    popup_s,
-   NULL, NULL, 
+   NULL, NULL,
    0, 0,
    LISTBOX_WRAP | LISTBOX_MOUSE_CANCEL | LISTBOX_MOUSE_OK2 | LISTBOX_USE_RMB
 };
@@ -698,7 +698,7 @@ int do_popup()
 	 if (strlen(popup_s[popup.count].text) > popup.slen)
 	    popup.slen = strlen(popup_s[popup.count].text);
 	 popup.count++;
-      } 
+      }
    }
 
    if (popup.count <= 0)

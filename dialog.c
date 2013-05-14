@@ -305,24 +305,24 @@ void coldraw_proc(int w, LISTBOX *lb, LISTITEM *li)
 
 LISTITEM colormenu_s[18] =
 {
-   { "Text Color",           (int)&config.norm_col,    colclick_proc, coldraw_proc, NULL },
-   { "Text Background",      (int)&config.norm_col,    colclick_proc, coldraw_proc, NULL },
-   { "Selected Text Color",  (int)&config.sel_col,     colclick_proc, coldraw_proc, NULL },
-   { "Selected Background",  (int)&config.sel_col,     colclick_proc, coldraw_proc, NULL },
-   { "Folded Text Color",    (int)&config.fold_col,    colclick_proc, coldraw_proc, NULL },
-   { "Folded Background ",   (int)&config.fold_col,    colclick_proc, coldraw_proc, NULL },
-   { "User Interface Color", (int)&config.hi_col,      colclick_proc, coldraw_proc, NULL },
-   { "Interface Background", (int)&config.hi_col,      colclick_proc, coldraw_proc, NULL },
-   { "Language Keywords",    (int)&config.keyword_col, colclick_proc, coldraw_proc, NULL },
-   { "Keywords Background",  (int)&config.keyword_col, colclick_proc, coldraw_proc, NULL },
-   { "Comments",             (int)&config.comment_col, colclick_proc, coldraw_proc, NULL },
-   { "Comment Background",   (int)&config.comment_col, colclick_proc, coldraw_proc, NULL },
-   { "String Constants",     (int)&config.string_col,  colclick_proc, coldraw_proc, NULL },
-   { "String Background",    (int)&config.string_col,  colclick_proc, coldraw_proc, NULL },
-   { "Numeric Constants",    (int)&config.number_col,  colclick_proc, coldraw_proc, NULL },
-   { "Numeric Background",   (int)&config.number_col,  colclick_proc, coldraw_proc, NULL },
-   { "Symbol Characters",    (int)&config.symbol_col,  colclick_proc, coldraw_proc, NULL },
-   { "Symbol Background",    (int)&config.symbol_col,  colclick_proc, coldraw_proc, NULL },
+   { "Text Color",           (intptr_t)&config.norm_col,    colclick_proc, coldraw_proc, NULL },
+   { "Text Background",      (intptr_t)&config.norm_col,    colclick_proc, coldraw_proc, NULL },
+   { "Selected Text Color",  (intptr_t)&config.sel_col,     colclick_proc, coldraw_proc, NULL },
+   { "Selected Background",  (intptr_t)&config.sel_col,     colclick_proc, coldraw_proc, NULL },
+   { "Folded Text Color",    (intptr_t)&config.fold_col,    colclick_proc, coldraw_proc, NULL },
+   { "Folded Background ",   (intptr_t)&config.fold_col,    colclick_proc, coldraw_proc, NULL },
+   { "User Interface Color", (intptr_t)&config.hi_col,      colclick_proc, coldraw_proc, NULL },
+   { "Interface Background", (intptr_t)&config.hi_col,      colclick_proc, coldraw_proc, NULL },
+   { "Language Keywords",    (intptr_t)&config.keyword_col, colclick_proc, coldraw_proc, NULL },
+   { "Keywords Background",  (intptr_t)&config.keyword_col, colclick_proc, coldraw_proc, NULL },
+   { "Comments",             (intptr_t)&config.comment_col, colclick_proc, coldraw_proc, NULL },
+   { "Comment Background",   (intptr_t)&config.comment_col, colclick_proc, coldraw_proc, NULL },
+   { "String Constants",     (intptr_t)&config.string_col,  colclick_proc, coldraw_proc, NULL },
+   { "String Background",    (intptr_t)&config.string_col,  colclick_proc, coldraw_proc, NULL },
+   { "Numeric Constants",    (intptr_t)&config.number_col,  colclick_proc, coldraw_proc, NULL },
+   { "Numeric Background",   (intptr_t)&config.number_col,  colclick_proc, coldraw_proc, NULL },
+   { "Symbol Characters",    (intptr_t)&config.symbol_col,  colclick_proc, coldraw_proc, NULL },
+   { "Symbol Background",    (intptr_t)&config.symbol_col,  colclick_proc, coldraw_proc, NULL },
 };
 
 
@@ -450,10 +450,10 @@ void numdraw_proc(int w, LISTBOX *lb, LISTITEM *li)
 
 LISTITEM displaybox_s[5] =
 {
-   { "Display comments",         (int)&config.comments,  boolclick_proc, booldraw_proc, "If set, the menus display comments (like this message)" },
-   { "Display cursor position",  (int)&config.show_pos,  boolclick_proc, booldraw_proc, "If set, the cursor position is displayed at the bottom of the screen" },
-   { "Display menu bar",         (int)&config.show_menu, boolclick_proc, booldraw_proc, "If set, the menus are always visible at the top of the screen" },
-   { "Display scroll bar",       (int)&config.show_bar,  boolclick_proc, booldraw_proc, "If set, the scroll bar is always visible at the right of the screen" },
+   { "Display comments",         (intptr_t)&config.comments,  boolclick_proc, booldraw_proc, "If set, the menus display comments (like this message)" },
+   { "Display cursor position",  (intptr_t)&config.show_pos,  boolclick_proc, booldraw_proc, "If set, the cursor position is displayed at the bottom of the screen" },
+   { "Display menu bar",         (intptr_t)&config.show_menu, boolclick_proc, booldraw_proc, "If set, the menus are always visible at the top of the screen" },
+   { "Display scroll bar",       (intptr_t)&config.show_bar,  boolclick_proc, booldraw_proc, "If set, the scroll bar is always visible at the right of the screen" },
 };
 
 
@@ -499,22 +499,22 @@ int display_proc(LISTBOX *lb, LISTITEM *li)
 
 LISTITEM toolsmenubox_s[16] =
 {
-   { "Tool 1",  (int)&config.tool[0],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 2",  (int)&config.tool[1],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 3",  (int)&config.tool[2],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 4",  (int)&config.tool[3],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 5",  (int)&config.tool[4],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 6",  (int)&config.tool[5],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 7",  (int)&config.tool[6],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 8",  (int)&config.tool[7],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 9",  (int)&config.tool[8],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 10",  (int)&config.tool[9],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 11",  (int)&config.tool[10],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 12",  (int)&config.tool[11],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 13",  (int)&config.tool[12],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 14",  (int)&config.tool[13],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 15",  (int)&config.tool[14],  strclick_proc,  strdraw_proc, NULL  },
-   { "Tool 16",  (int)&config.tool[15],  strclick_proc,  strdraw_proc, NULL  }
+   { "Tool 1",  (intptr_t)&config.tool[0],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 2",  (intptr_t)&config.tool[1],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 3",  (intptr_t)&config.tool[2],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 4",  (intptr_t)&config.tool[3],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 5",  (intptr_t)&config.tool[4],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 6",  (intptr_t)&config.tool[5],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 7",  (intptr_t)&config.tool[6],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 8",  (intptr_t)&config.tool[7],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 9",  (intptr_t)&config.tool[8],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 10",  (intptr_t)&config.tool[9],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 11",  (intptr_t)&config.tool[10],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 12",  (intptr_t)&config.tool[11],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 13",  (intptr_t)&config.tool[12],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 14",  (intptr_t)&config.tool[13],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 15",  (intptr_t)&config.tool[14],  strclick_proc,  strdraw_proc, NULL  },
+   { "Tool 16",  (intptr_t)&config.tool[15],  strclick_proc,  strdraw_proc, NULL  }
 };
 
 
@@ -562,23 +562,23 @@ LISTITEM configbox_s[20] =
    { "Screen display options",   0,                            display_proc,     NULL,          "Toggle display of cursor position, menus and the scroll bar" },
    { "Edit tools menu",          0,                            tools_proc,       NULL,          "Customise the tools menu" },
    { "Edit right click menu",    0,                            right_menu_proc,  NULL,          "Customise the right mouse button popup menu" },
-   { "Double click function",    (int)&config.dclick_command,  funcclick_proc,   funcdraw_proc, "The function to execute when the left mouse button is double-clicked" },
-   { "Auto fold files",          (int)&config.auto_fold,       strclick_proc,    strdraw_proc,  "Files with these extensions will automatically be folded" },
-   { "Auto indent files",        (int)&config.auto_indent,     strclick_proc,    strdraw_proc,  "Files with these extensions will have automatic indentation turned on" },
-   { "Binary files",             (int)&config.bin,             strclick_proc,    strdraw_proc,  "Files with these extensions will be loaded in binary mode" },
-   { "Hex mode files",           (int)&config.hex,             strclick_proc,    strdraw_proc,  "Files with these extensions will be loaded in hex editing mode" },
-   { "Browse files",             (int)&config.makefiles,       strclick_proc,    strdraw_proc,  "Files with these extensions will be loaded by the browse command" },
-   { "Wordwrap files",           (int)&config.wrap,            strclick_proc,    strdraw_proc,  "Files with these extensions will have wordwrap turned on" },
-   { "Wrap at column",           (int)&config.wrap_col,        numclick_proc,    numdraw_proc,  "The default column at which to wordwrap" },
-   { "Use big cursor",           (int)&config.big_cursor,      boolclick_proc,   booldraw_proc, "If set, a tall editing cursor is displayed" },
-   { "Make backups",             (int)&config.make_backups,    boolclick_proc,   booldraw_proc, "If set, when saving files the old versions are renamed to *.bak" },
-   { "Check for changed files",  (int)&config.check_files,     boolclick_proc,   booldraw_proc, "If set, checks for files being changed by external programs" },
-   { "Strip spaces on save",     (int)&config.save_strip,      boolclick_proc,   booldraw_proc, "If set, trailing spaces are removed and tabs are inserted when saving files" },
-   { "Print only ascii chars",   (int)&config.print_ascii,     boolclick_proc,   booldraw_proc, "If set, extended ascii characters are replaced with spaces during printing" },
-   { "External tab size",        (int)&config.load_tabs,       numclick_proc,    numdraw_proc,  "The tab size used by external files, for the read/write routines" },
-   { "Screensaver delay (mins)", (int)&config.screen_save,     numclick_proc,    numdraw_proc,  "The delay before the screensaver kicks in. Zero for no screensaver" },
-   { "Undo levels",              (int)&config.undo_levels,     numclick_proc,    numdraw_proc,  "The number of stored undo operations (per file)" },
-   { "File search",              (int)&config.file_search,     numclick_proc,    numdraw_proc,  "How many directories to recurse when looking for a file" }
+   { "Double click function",    (intptr_t)&config.dclick_command,  funcclick_proc,   funcdraw_proc, "The function to execute when the left mouse button is double-clicked" },
+   { "Auto fold files",          (intptr_t)&config.auto_fold,       strclick_proc,    strdraw_proc,  "Files with these extensions will automatically be folded" },
+   { "Auto indent files",        (intptr_t)&config.auto_indent,     strclick_proc,    strdraw_proc,  "Files with these extensions will have automatic indentation turned on" },
+   { "Binary files",             (intptr_t)&config.bin,             strclick_proc,    strdraw_proc,  "Files with these extensions will be loaded in binary mode" },
+   { "Hex mode files",           (intptr_t)&config.hex,             strclick_proc,    strdraw_proc,  "Files with these extensions will be loaded in hex editing mode" },
+   { "Browse files",             (intptr_t)&config.makefiles,       strclick_proc,    strdraw_proc,  "Files with these extensions will be loaded by the browse command" },
+   { "Wordwrap files",           (intptr_t)&config.wrap,            strclick_proc,    strdraw_proc,  "Files with these extensions will have wordwrap turned on" },
+   { "Wrap at column",           (intptr_t)&config.wrap_col,        numclick_proc,    numdraw_proc,  "The default column at which to wordwrap" },
+   { "Use big cursor",           (intptr_t)&config.big_cursor,      boolclick_proc,   booldraw_proc, "If set, a tall editing cursor is displayed" },
+   { "Make backups",             (intptr_t)&config.make_backups,    boolclick_proc,   booldraw_proc, "If set, when saving files the old versions are renamed to *.bak" },
+   { "Check for changed files",  (intptr_t)&config.check_files,     boolclick_proc,   booldraw_proc, "If set, checks for files being changed by external programs" },
+   { "Strip spaces on save",     (intptr_t)&config.save_strip,      boolclick_proc,   booldraw_proc, "If set, trailing spaces are removed and tabs are inserted when saving files" },
+   { "Print only ascii chars",   (intptr_t)&config.print_ascii,     boolclick_proc,   booldraw_proc, "If set, extended ascii characters are replaced with spaces during printing" },
+   { "External tab size",        (intptr_t)&config.load_tabs,       numclick_proc,    numdraw_proc,  "The tab size used by external files, for the read/write routines" },
+   { "Screensaver delay (mins)", (intptr_t)&config.screen_save,     numclick_proc,    numdraw_proc,  "The delay before the screensaver kicks in. Zero for no screensaver" },
+   { "Undo levels",              (intptr_t)&config.undo_levels,     numclick_proc,    numdraw_proc,  "The number of stored undo operations (per file)" },
+   { "File search",              (intptr_t)&config.file_search,     numclick_proc,    numdraw_proc,  "How many directories to recurse when looking for a file" }
 };
 
 

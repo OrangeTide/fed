@@ -602,7 +602,7 @@ void pch(unsigned char c)
 
 
 
-void mywrite(unsigned char *s)
+void mywrite(char *s)
 {
    while ((*s) && (x_pos < screen_w)) {
       if (x_pos >= 0) {
@@ -1234,9 +1234,10 @@ char *get_clipboard_data(int *size)
 {
    FILE *f;
    char *p;
+   size_t cnt;
 
    *size = file_size(clipboard_file());
-   if (*size <= 0) 
+   if (*size <= 0)
       return NULL;
 
    p = malloc(*size);
@@ -1249,7 +1250,12 @@ char *get_clipboard_data(int *size)
       return NULL;
    }
 
-   fread(p, 1, *size, f);
+   cnt = fread(p, 1, *size, f);
+   if (cnt != *size || ferror(f)) {
+      free(p);
+      fclose(f);
+      return NULL;
+   }
    fclose(f);
 
    return p;
@@ -1284,7 +1290,7 @@ clock_t myclock()
    }
    else {
       t -= first;
-      return (double)t * (double)CLOCKS_PER_SEC / (double)CLK_TCK;
+      return (double)t * (double)CLOCKS_PER_SEC / (double)sysconf(_SC_CLK_TCK);
    }
 }
 
@@ -1317,7 +1323,7 @@ int mouse_changed(int *x, int *y)
    if (y)
       *y = _mouse_y;
 
-   return ((_mouse_x != m_x) || (_mouse_y != m_y) || 
+   return ((_mouse_x != m_x) || (_mouse_y != m_y) ||
 	   (_mouse_b != m_b) || (_mouse_b));
 }
 
@@ -1392,7 +1398,7 @@ int mouse_dclick(int mode)
 	    return TRUE;
 
       if (m_b & 1) {
-	 if (mode) 
+	 if (mode)
 	    return TRUE;
       }
       else

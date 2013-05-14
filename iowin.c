@@ -469,7 +469,7 @@ void pch(int c)
 
 
 
-void mywrite(unsigned char *s)
+void mywrite(char *s)
 {
    while ((*s) && (x_pos < screen_w)) {
       if (x_pos >= 0) {
@@ -568,7 +568,7 @@ void home()
 
 void newline()
 {
-   if (y_pos < screen_h-1) 
+   if (y_pos < screen_h-1)
       y_pos++;
 
    x_pos = 0;
@@ -600,18 +600,18 @@ void goto2(int x, int y)
 
 void backspace()
 {
-   if (x_pos > 0) { 
-      x_pos--; 
-      pch(' '); 
-      x_pos--; 
-   } 
+   if (x_pos > 0) {
+      x_pos--;
+      pch(' ');
+      x_pos--;
+   }
 }
 
 
 
 void linefeed()
 {
-   if (y_pos < screen_h-1) 
+   if (y_pos < screen_h-1)
       y_pos++;
 }
 
@@ -1009,7 +1009,7 @@ int do_for_each_directory(char *name, int (*call_back)(char *, int), int param)
       return errno;
 
    do {
-      if ((dta.attrib & _A_SUBDIR) && 
+      if ((dta.attrib & _A_SUBDIR) &&
 	  (strcmp(dta.name, ".") != 0)) {
 	 strcpy(buf,name);
 	 strcpy(get_fname(buf),dta.name);
@@ -1165,7 +1165,7 @@ int mouse_changed(int *x, int *y)
       *y = _mouse_y * mouse_height / font_h;
 
    return ((_mouse_x / font_w != m_x) ||
-	   (_mouse_y * mouse_height / font_h != m_y) || 
+	   (_mouse_y * mouse_height / font_h != m_y) ||
 	   (_mouse_b != m_b) ||
 	   (_mouse_b));
 }
@@ -1244,7 +1244,7 @@ int mouse_dclick(int mode)
 	    return TRUE;
 
       if (m_b & 1) {
-	 if (mode) 
+	 if (mode)
 	    return TRUE;
       }
       else
@@ -1408,7 +1408,7 @@ void paint(HDC dc)
 
 	 while ((x+i < screen_w) && (screen[y][x+i].col == screen[y][x].col)) {
 	    c = screen[y][x+i].ch;
-	    
+
 	    if (c > 255)
 	    	c = ' ';
 
@@ -1449,10 +1449,10 @@ void paint(HDC dc)
 
       while (x < screen_w) {
 	 short c = screen[y][x].ch;
-	 
+
 	 if (c > 255) {
 	    fgc = col[screen[y][x].col & 15];
-	 
+
 	    if (fgc != current_fgc) {
 	       SetTextColor(backbuffer_dc, fgc);
 	       current_fgc = fgc;

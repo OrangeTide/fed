@@ -103,7 +103,7 @@ clock_t myclock();
 #define clock()         myclock()
 
 #undef CLOCKS_PER_SEC
-#define CLOCKS_PER_SEC  CLK_TCK
+#define CLOCKS_PER_SEC  sysconf(_SC_CLK_TCK)
 
 
 #define FMODE_READ          1

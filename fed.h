@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-
+#include <stdint.h>
 #include "io.h"
 
 #define VS              "FED 2.23"
@@ -117,9 +117,9 @@ typedef struct SYNTAX           /* syntax highlighting data */
    struct SYNTAX *next;         /* linked list */
    char files[80];              /* which files this data applies to */
    char open_com1[COM_SIZE];    /* multi-line comment type 1 */
-   char close_com1[COM_SIZE]; 
+   char close_com1[COM_SIZE];
    char open_com2[COM_SIZE];    /* multi-line comment type 2 */
-   char close_com2[COM_SIZE]; 
+   char close_com2[COM_SIZE];
    char eol_com1[COM_SIZE];     /* single-line comments */
    char eol_com2[COM_SIZE];
    char hex_marker[COM_SIZE];   /* marker for hex numbers */
@@ -341,7 +341,7 @@ struct LISTBOX;
 typedef struct LISTITEM
 {
    char *text;
-   int data;
+   intptr_t data;
    int (*click_proc)(struct LISTBOX *lb, struct LISTITEM *li);
    void (*draw_proc)(int w, struct LISTBOX *lb, struct LISTITEM *li);
    char *comment;
