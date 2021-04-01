@@ -25,20 +25,20 @@ int main(int argc, char *argv[])
 
    if (argc != 3) {
       printf("\nUsage: makehelp <infile> <outfile>\n");
-      return -1;
+      return 1;
    }
 
    in = fopen(argv[1], "rb");
    if (!in) {
       printf("\nError opening %s\n", argv[1]);
-      return -1;
+      return 1;
    }
 
    out = fopen(argv[2], "w");
    if (!in) {
       fclose(in);
       printf("\nError opening %s\n", argv[2]);
-      return -1;
+      return 1;
    }
 
    fprintf(out, "/* output from the makehelp utility program */\n\n");
@@ -49,6 +49,16 @@ int main(int argc, char *argv[])
 
    while (!feof(in)) {
       c = getc(in);
+
+      if (ferror(in)) {
+         printf("%s: file I/O error!\n", argv[1]);
+         return 1;
+      }
+
+      if (len + 1 >= sizeof(buf)) {
+         printf("%s:%d: line length too long\n", argv[1], line);
+         return 1;
+      }
 
       if ((c=='\r') || (c=='\n')) {
 	 if (c=='\r') {
@@ -90,7 +100,7 @@ int main(int argc, char *argv[])
       }
       else {
 	 if (c==0)
-	    printf("%s%d: Warning: NULL will be interpreted as end of line\n", argv[1], line);
+	    printf("%s:%d: Warning: NULL will be interpreted as end of line\n", argv[1], line);
 	 buf[len++] = c;
       }
    }
