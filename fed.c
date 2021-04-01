@@ -527,10 +527,7 @@ void fatal_error(char *s)
 {
    cls();
    linefeed();
-   if ((errno > 0) && (errno < sys_nerr))
-      mywrite((char *)sys_errlist[errno]);
-   else
-      mywrite("Error");
+   mywrite(strerror(errno));
    if(s) {
       newline();
       mywrite(s);
