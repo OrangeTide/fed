@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     branches: [master]
-    tags: ['v*']
+    tags: ['rel/*']
   pull_request:
 
 jobs:
@@ -17,10 +17,56 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build
         run: sh ci/build-linux-musl.sh
+      - name: Package
+        run: sh ci/package-linux-x86_64.sh
       - uses: actions/upload-artifact@v4
         with:
           name: fed-linux-x86_64
-          path: build/linux-x86_64/fed
+          path: dist/fed-linux-x86_64.tar.gz
+
+  linux-arm64:
+    name: Linux ARM64 (musl static)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+      - name: Build and package in Alpine ARM64 container
+        run: |
+          docker run --rm --platform linux/arm64 \
+            -v "${{ github.workspace }}:/work" -w /work \
+            alpine:3.21 sh -c "
+              apk add --no-cache build-base ncurses-dev ncurses-static &&
+              sh ci/build-linux-arm64.sh &&
+              sh ci/package-linux-arm64.sh
+            "
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fed-linux-arm64
+          path: dist/fed-linux-arm64.tar.gz
+
+  linux-arm32:
+    name: Linux ARM32 (musl static)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm
+      - name: Build and package in Alpine ARM32 container
+        run: |
+          docker run --rm --platform linux/arm/v7 \
+            -v "${{ github.workspace }}:/work" -w /work \
+            alpine:3.21 sh -c "
+              apk add --no-cache build-base ncurses-dev ncurses-static &&
+              sh ci/build-linux-arm32.sh &&
+              sh ci/package-linux-arm32.sh
+            "
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fed-linux-arm32
+          path: dist/fed-linux-arm32.tar.gz
 
   windows-x86_64:
     name: Windows x86-64
@@ -33,10 +79,30 @@ jobs:
           sudo apt-get install -y gcc-mingw-w64-x86-64
       - name: Build
         run: ci/build-win64.sh
+      - name: Package
+        run: ci/package-win64.sh
       - uses: actions/upload-artifact@v4
         with:
           name: fed-windows-x86_64
-          path: build/win64/fed.exe
+          path: dist/fed-win64.zip
+
+  windows-x86:
+    name: Windows x86 (32-bit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install MinGW cross-compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-mingw-w64-i686
+      - name: Build
+        run: ci/build-win32.sh
+      - name: Package
+        run: ci/package-win32.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fed-windows-x86
+          path: dist/fed-win32.zip
 
   msdos:
     name: MS-DOS (DJGPP)
@@ -53,7 +119,37 @@ jobs:
           echo "/usr/local/djgpp/bin" >> "$GITHUB_PATH"
       - name: Build
         run: ci/build-dos-djgpp.sh
+      - name: Package
+        run: ci/package-dos.sh
       - uses: actions/upload-artifact@v4
         with:
           name: fed-msdos
-          path: build/dos/fed.exe
+          path: dist/fed-dos.zip
+
+  release:
+    name: Create release
+    if: startsWith(github.ref, 'refs/tags/release-')
+    needs: [linux-x86_64, linux-arm64, linux-arm32, windows-x86_64, windows-x86, msdos]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          VERSION="${TAG#release-}"
+          gh release create "$TAG" \
+            --title "FED $VERSION" \
+            --generate-notes \
+            artifacts/fed-linux-x86_64/* \
+            artifacts/fed-linux-arm64/* \
+            artifacts/fed-linux-arm32/* \
+            artifacts/fed-windows-x86_64/* \
+            artifacts/fed-windows-x86/* \
+            artifacts/fed-msdos/*
