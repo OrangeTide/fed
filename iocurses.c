@@ -83,13 +83,21 @@ void curs_init(int r)
    nodelay(stdscr, TRUE);
 
    if (has_colors()) {
+      int limit;
+
       start_color();
 
-      for (i=1; i<COLOR_PAIRS; i++) {
-	 f = (i-1)%COLORS;
-	 b = (i-1)/COLORS;
+      /* 8 DOS palette colors = 64 pairs; use base-8 indexing so tattr()
+         and init_pair() agree regardless of terminal COLORS value */
+      limit = 64;
+      if (limit >= COLOR_PAIRS)
+	 limit = COLOR_PAIRS - 1;
 
-	 /* Linux console pallete isn't the same as in DOS */
+      for (i=1; i<=limit; i++) {
+	 f = (i-1) % 8;
+	 b = (i-1) / 8;
+
+	 /* remap DOS palette order to curses order */
 	 if (f == 1)
 	    f = 4;
 	 else if (f == 4)
@@ -98,8 +106,6 @@ void curs_init(int r)
 	    f = 6;
 	 else if (f == 6)
 	    f = 3;
-	 else
-	    f = f;
 
 	 if (b == 1)
 	    b = 4;
@@ -109,10 +115,8 @@ void curs_init(int r)
 	    b = 6;
 	 else if (b == 6)
 	    b = 3;
-	 else
-	    b = b;
 
-	 init_pair(i, f%COLORS, b%COLORS);
+	 init_pair(i, f, b);
       }
 
       got_color = TRUE;
@@ -757,7 +761,7 @@ void tattr(int col)
    if (got_color) {
       f = col&15;
       b = col>>4;
-      c = (((f&7) + (b&7)*COLORS) % (COLOR_PAIRS-1)) + 1;
+      c = (f&7) + (b&7)*8 + 1;
 
       cattrib |= COLOR_PAIR(c);
 
