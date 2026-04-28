@@ -21,7 +21,6 @@
 #include <sys/stat.h>
 #include <sys/times.h>
 #include <sys/ioctl.h>
-#include <sys/kd.h>
 
 #include "fed.h"
 
