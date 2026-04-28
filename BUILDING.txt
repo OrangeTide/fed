@@ -122,5 +122,5 @@ Releases
 --------
 
 GitHub Actions builds all targets on every push to master. Tagged
-releases using CalVer (e.g. git tag release-2026.04.27) automatically
+releases using CalVer (e.g. git tag rel/2026.04.27) automatically
 create a GitHub Release with all platform archives attached.
