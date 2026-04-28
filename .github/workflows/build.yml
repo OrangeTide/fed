@@ -1,0 +1,59 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+    tags: ['v*']
+  pull_request:
+
+jobs:
+  linux-x86_64:
+    name: Linux x86-64 (musl static)
+    runs-on: ubuntu-latest
+    container: alpine:3.21
+    steps:
+      - name: Install build dependencies
+        run: apk add --no-cache build-base ncurses-dev ncurses-static git
+      - uses: actions/checkout@v4
+      - name: Build
+        run: sh ci/build-linux-musl.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fed-linux-x86_64
+          path: build/linux-x86_64/fed
+
+  windows-x86_64:
+    name: Windows x86-64
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install MinGW cross-compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-mingw-w64-x86-64
+      - name: Build
+        run: ci/build-win64.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fed-windows-x86_64
+          path: build/win64/fed.exe
+
+  msdos:
+    name: MS-DOS (DJGPP)
+    runs-on: ubuntu-latest
+    env:
+      # https://github.com/andrewwutw/build-djgpp/releases
+      DJGPP_ARCHIVE: djgpp-linux64-gcc1220.tar.bz2
+      DJGPP_URL: https://github.com/andrewwutw/build-djgpp/releases/download/v3.4/djgpp-linux64-gcc1220.tar.bz2
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download DJGPP cross-compiler
+        run: |
+          curl -fsSL "$DJGPP_URL" | sudo tar xjf - -C /usr/local
+          echo "/usr/local/djgpp/bin" >> "$GITHUB_PATH"
+      - name: Build
+        run: ci/build-dos-djgpp.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fed-msdos
+          path: build/dos/fed.exe
