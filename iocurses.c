@@ -21,7 +21,6 @@
 #include <sys/stat.h>
 #include <sys/times.h>
 #include <sys/ioctl.h>
-#include <sys/kd.h>
 
 #include "fed.h"
 
@@ -83,13 +82,21 @@ void curs_init(int r)
    nodelay(stdscr, TRUE);
 
    if (has_colors()) {
+      int limit;
+
       start_color();
 
-      for (i=1; i<COLOR_PAIRS; i++) {
-	 f = (i-1)%COLORS;
-	 b = (i-1)/COLORS;
+      /* 8 DOS palette colors = 64 pairs; use base-8 indexing so tattr()
+         and init_pair() agree regardless of terminal COLORS value */
+      limit = 64;
+      if (limit >= COLOR_PAIRS)
+	 limit = COLOR_PAIRS - 1;
 
-	 /* Linux console pallete isn't the same as in DOS */
+      for (i=1; i<=limit; i++) {
+	 f = (i-1) % 8;
+	 b = (i-1) / 8;
+
+	 /* remap DOS palette order to curses order */
 	 if (f == 1)
 	    f = 4;
 	 else if (f == 4)
@@ -98,8 +105,6 @@ void curs_init(int r)
 	    f = 6;
 	 else if (f == 6)
 	    f = 3;
-	 else
-	    f = f;
 
 	 if (b == 1)
 	    b = 4;
@@ -109,10 +114,8 @@ void curs_init(int r)
 	    b = 6;
 	 else if (b == 6)
 	    b = 3;
-	 else
-	    b = b;
 
-	 init_pair(i, f%COLORS, b%COLORS);
+	 init_pair(i, f, b);
       }
 
       got_color = TRUE;
@@ -173,12 +176,15 @@ void term_init(int screenheight)
       printf("\e[?35l\e[?1000h\e[21t");
       fflush(stdout);
 
+      wtimeout(stdscr, 200);
+
       i = 0;
 
       for (;;) {
-	 do {
-	    c = getch();
-	 } while (c == ERR);
+	 c = getch();
+
+	 if (c == ERR)
+	    break;
 
 	 orig_title[i] = c;
 
@@ -188,21 +194,28 @@ void term_init(int screenheight)
 	 i++;
       }
 
-      orig_title[i-1] = 0;
+      nodelay(stdscr, TRUE);
 
-      p = strstr(orig_title, "\e]l");
-
-      if (p) {
-	 p += 3;
-
-	 memmove(orig_title, p, strlen(p)+1);
-
-	 for (i=0; orig_title[i]; i++)
-	    if (orig_title[i] < ' ')
-	       orig_title[i] = ' ';
-      }
-      else
+      if (c == ERR) {
 	 orig_title[0] = 0;
+      }
+      else {
+	 orig_title[i-1] = 0;
+
+	 p = strstr(orig_title, "\e]l");
+
+	 if (p) {
+	    p += 3;
+
+	    memmove(orig_title, p, strlen(p)+1);
+
+	    for (i=0; orig_title[i]; i++)
+	       if (orig_title[i] < ' ')
+		  orig_title[i] = ' ';
+	 }
+	 else
+	    orig_title[0] = 0;
+      }
 
    }
 
@@ -747,7 +760,7 @@ void tattr(int col)
    if (got_color) {
       f = col&15;
       b = col>>4;
-      c = (((f&7) + (b&7)*COLORS) % (COLOR_PAIRS-1)) + 1;
+      c = (f&7) + (b&7)*8 + 1;
 
       cattrib |= COLOR_PAIR(c);
 
