@@ -1,4 +1,11 @@
-*.o
+# ignore editor junk
 *~
-*.exe
-help.c
+.*.swp
+
+# ignore build artifacts
+*.o
+/fed
+/fed.exe
+/help.c
+/makehelp
+/build/

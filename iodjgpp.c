@@ -342,7 +342,7 @@ void pch(unsigned char c)
 
 
 
-void mywrite(unsigned char *s)
+void mywrite(char *s)
 {
    int p;
 
