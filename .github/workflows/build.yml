@@ -131,12 +131,47 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/rel/')
     needs: [linux-x86_64, linux-arm64, linux-arm32, windows-x86_64, windows-x86, msdos]
     runs-on: ubuntu-latest
+    environment: release
     permissions:
       contents: write
     steps:
       - uses: actions/download-artifact@v4
         with:
           path: artifacts
+      - name: Scan artifacts with VirusTotal
+        env:
+          VT_API_KEY: ${{ secrets.VT_API_KEY }}
+        run: |
+          pip install vt-py
+          python3 -c "
+          import vt, sys, os, time, pathlib
+
+          client = vt.Client(os.environ['VT_API_KEY'])
+          failed = []
+
+          for path in sorted(pathlib.Path('artifacts').rglob('*')):
+              if not path.is_file():
+                  continue
+              print(f'Scanning {path} ...')
+              with open(path, 'rb') as f:
+                  analysis = client.scan_file(f)
+              # poll until analysis completes
+              while True:
+                  analysis = client.get_object('/analyses/{}', analysis.id)
+                  if analysis.status == 'completed':
+                      break
+                  time.sleep(15)
+              stats = analysis.stats
+              print(f'  Results: {stats}')
+              if stats.get('malicious', 0) > 0 or stats.get('suspicious', 0) > 0:
+                  failed.append(str(path))
+
+          client.close()
+          if failed:
+              print(f'::error::AV detections found in: {\", \".join(failed)}')
+              sys.exit(1)
+          print('All artifacts clean.')
+          "
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
