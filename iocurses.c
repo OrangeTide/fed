@@ -173,12 +173,15 @@ void term_init(int screenheight)
       printf("\e[?35l\e[?1000h\e[21t");
       fflush(stdout);
 
+      wtimeout(stdscr, 200);
+
       i = 0;
 
       for (;;) {
-	 do {
-	    c = getch();
-	 } while (c == ERR);
+	 c = getch();
+
+	 if (c == ERR)
+	    break;
 
 	 orig_title[i] = c;
 
@@ -188,21 +191,28 @@ void term_init(int screenheight)
 	 i++;
       }
 
-      orig_title[i-1] = 0;
+      nodelay(stdscr, TRUE);
 
-      p = strstr(orig_title, "\e]l");
-
-      if (p) {
-	 p += 3;
-
-	 memmove(orig_title, p, strlen(p)+1);
-
-	 for (i=0; orig_title[i]; i++)
-	    if (orig_title[i] < ' ')
-	       orig_title[i] = ' ';
-      }
-      else
+      if (c == ERR) {
 	 orig_title[0] = 0;
+      }
+      else {
+	 orig_title[i-1] = 0;
+
+	 p = strstr(orig_title, "\e]l");
+
+	 if (p) {
+	    p += 3;
+
+	    memmove(orig_title, p, strlen(p)+1);
+
+	    for (i=0; orig_title[i]; i++)
+	       if (orig_title[i] < ' ')
+		  orig_title[i] = ' ';
+	 }
+	 else
+	    orig_title[0] = 0;
+      }
 
    }
 
