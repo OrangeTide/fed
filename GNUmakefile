@@ -23,23 +23,24 @@ endif
 
 ifeq ($(TARGET),djgpp)
 fed$(EXE): CFLAGS += -DTARGET_DJGPP
-fed$(EXE): LDFLAGS +=
 else
 ifeq ($(TARGET),win)
 fed$(EXE): CFLAGS += -DTARGET_WIN
-fed$(EXE): LDFLAGS += user32.lib gdi32.lib shell32.lib winmm.lib advapi32.lib
+fed$(EXE): LDLIBS += user32.lib gdi32.lib shell32.lib winmm.lib advapi32.lib
 else
 ifeq ($(TARGET),curses)
-fed$(EXE): CFLAGS += -DTARGET_CURSES
+NCURSES_CFLAGS ?= $(shell pkg-config --cflags ncurses 2>/dev/null)
+NCURSES_LIBS ?= $(shell pkg-config --libs ncurses 2>/dev/null || echo -lncurses)
+fed$(EXE): CFLAGS += -DTARGET_CURSES $(NCURSES_CFLAGS)
 ifdef DJGPP
-fed$(EXE): LDFLAGS += -lcurso
+fed$(EXE): LDLIBS += -lcurso
 else
-fed$(EXE): LDFLAGS += -lncurses
+fed$(EXE): LDLIBS += $(NCURSES_LIBS)
 endif
 else
 ifeq ($(TARGET),alleg)
 fed$(EXE): CFLAGS += -DTARGET_ALLEG
-fed$(EXE): LDFLAGS += -lalleg
+fed$(EXE): LDLIBS += -lalleg
 else
 badtarget:
 	@echo Unknown compile target $(TARGET)! (expecting djgpp, curses, msvc, or alleg)
