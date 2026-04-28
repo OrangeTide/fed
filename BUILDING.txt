@@ -1,0 +1,126 @@
+Building FED
+============
+
+FED can be built natively or cross-compiled from Linux for several
+targets. Each target has a build script in the ci/ directory and can
+also be built using the GNUmakefile.
+
+
+Native Linux Build
+------------------
+
+Install build dependencies and run make:
+
+  Debian/Ubuntu:
+    sudo apt-get install build-essential libncurses-dev
+
+  Alpine:
+    apk add build-base ncurses-dev
+
+  Fedora:
+    sudo dnf install gcc make ncurses-devel
+
+Then:
+
+    make
+
+The GNUmakefile auto-detects ncurses via pkg-config. You can override
+NCURSES_CFLAGS and NCURSES_LIBS if needed.
+
+Alternatively, use the CI build script:
+
+    sh ci/build-linux-musl.sh
+
+This produces a static musl binary (when built on Alpine or with
+musl-gcc) at build/linux-x86_64/fed.
+
+
+Cross-Compiling from Debian/Ubuntu
+----------------------------------
+
+All cross-compilation targets use scripts in ci/ that check for the
+required toolchain and exit with an error if it is missing.
+
+
+Windows (x86-64 and x86):
+
+  Install the MinGW-w64 toolchain:
+
+    sudo apt-get install mingw-w64-tools \
+      mingw-w64-{i686,x86-64}-dev \
+      {gcc,g++,binutils}-mingw-w64-{i686,x86-64}
+
+  Build:
+
+    sh ci/build-win64.sh          # -> build/win64/fed.exe
+    sh ci/build-win32.sh          # -> build/win32/fed.exe
+
+
+MS-DOS (DJGPP):
+
+  Install the DJGPP cross-compiler. Pre-built toolchains are available
+  from https://github.com/andrewwutw/build-djgpp/releases
+
+  Extract it and add the bin directory to your PATH:
+
+    curl -fsSL https://github.com/andrewwutw/build-djgpp/releases/download/v3.4/djgpp-linux64-gcc1220.tar.bz2 \
+      | sudo tar xjf - -C /usr/local
+    export PATH="/usr/local/djgpp/bin:$PATH"
+
+  Build:
+
+    sh ci/build-dos-djgpp.sh      # -> build/dos/fed.exe
+
+
+Linux ARM64 (aarch64) and ARM32 (armv7):
+
+  These scripts are designed to run natively inside an Alpine Linux
+  container for the target architecture, using QEMU for emulation on
+  x86-64 hosts.
+
+  With Docker and QEMU binfmt support installed:
+
+    # ARM64 (Raspberry Pi 3+)
+    docker run --rm --platform linux/arm64 \
+      -v "$(pwd):/work" -w /work alpine:3.21 sh -c "
+        apk add --no-cache build-base ncurses-dev ncurses-static &&
+        sh ci/build-linux-arm64.sh
+      "
+
+    # ARM32 (Raspberry Pi 2+)
+    docker run --rm --platform linux/arm/v7 \
+      -v "$(pwd):/work" -w /work alpine:3.21 sh -c "
+        apk add --no-cache build-base ncurses-dev ncurses-static &&
+        sh ci/build-linux-arm32.sh
+      "
+
+  Or build natively on a Raspberry Pi running Alpine:
+
+    apk add build-base ncurses-dev ncurses-static
+    sh ci/build-linux-arm64.sh    # -> build/linux-arm64/fed
+    sh ci/build-linux-arm32.sh    # -> build/linux-arm32/fed
+
+
+Packaging
+---------
+
+After building, create distributable archives with the corresponding
+package script:
+
+    sh ci/package-linux-x86_64.sh   # -> dist/fed-linux-x86_64.tar.gz
+    sh ci/package-linux-arm64.sh    # -> dist/fed-linux-arm64.tar.gz
+    sh ci/package-linux-arm32.sh    # -> dist/fed-linux-arm32.tar.gz
+    sh ci/package-win64.sh          # -> dist/fed-win64.zip
+    sh ci/package-win32.sh          # -> dist/fed-win32.zip
+    sh ci/package-dos.sh            # -> dist/fed-dos.zip
+
+Each archive contains the binary along with readme.txt, COPYING,
+help.txt, and fed.syn.
+
+
+Releases
+--------
+
+GitHub Actions builds all targets on every push to master. Tagged
+releases using CalVer (e.g. git tag release-2026.04.27) automatically
+create a GitHub Release with all platform archives attached.
