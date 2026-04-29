@@ -1,5 +1,5 @@
 
-				    FED 2.23
+				    FED 2.24
 				    --------
 
 
@@ -24,6 +24,11 @@
    - record/playback keystroke macros.
    - built in tetris game and screensaver.
    - configuration options to alter key bindings, screen colors, etc.
+
+
+   What's new in version 2.24
+   --------------------------
+   - Robert Riebisch fixed `#...' handling in `makehelp' utility.
 
 
    What's new in version 2.23

@@ -83,7 +83,7 @@ ifdef DEBUGMODE
 CFLAGS = $(TCFLAGS) -g
 LFLAGS =
 else
-CFLAGS = $(TCFLAGS) -Wall -O3 -fomit-frame-pointer
+CFLAGS = $(TCFLAGS) -Wall -m486 -O3 -fomit-frame-pointer
 LFLAGS = -s
 endif
 

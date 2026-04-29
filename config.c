@@ -137,7 +137,7 @@ CONFIG config =
    112,                                /* symbols color */
 
    {                                   /* external tools */
- #ifdef DJGPP
+ #if (defined DJGPP) || (defined TARGET_WATCOM)
       "Run command|%p",
       "DOS shell|%h%eCOMSPEC%",
       "Make|redir -e " ERROR_FILE " make.exe",

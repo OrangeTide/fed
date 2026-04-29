@@ -35,7 +35,7 @@ LISTITEM keymenu_s[] =
    { "Cut",                   11, NULL, NULL, "Cut the selected text (deletes a line if no selection)" },
    { "Copy",                  12, NULL, NULL, "Copy the selected text" },
    { "Paste",                 13, NULL, NULL, "Paste text back into the file" },
- #ifdef TARGET_DJGPP
+ #if (defined TARGET_DJGPP) || (defined TARGET_WATCOM)
    { "Clipboard Cut",         84, NULL, NULL, "Cut text to the Windows clipboard" },
  #endif
    { "Clipboard Copy",        85, NULL, NULL, "Copy text to the Windows clipboard" },
@@ -122,7 +122,7 @@ LISTBOX keymenu =
    NULL,
    23, 2, 32, 0,
    3, 2, 1, 0, 24,
- #ifdef TARGET_DJGPP
+ #if (defined TARGET_DJGPP) || (defined TARGET_WATCOM)
    87,
  #elif (defined TARGET_CURSES) || (defined TARGET_WIN)
    85,
@@ -320,7 +320,7 @@ LISTBOX filemenu =
 LISTBOX editmenu =
 {
    &menu, NULL,
- #ifdef TARGET_DJGPP
+ #if (defined TARGET_DJGPP) || (defined TARGET_WATCOM)
    12, 1, 21, 14,          /* x, y, w, h */
    2, 1,                   /* xoff, yoff */
    1, 12,                  /* width, height */
@@ -352,7 +352,7 @@ LISTBOX searchmenu =
    17,                     /* slen */
    10,                     /* count */
    0, 0,
- #ifdef TARGET_DJGPP
+ #if (defined TARGET_DJGPP) || (defined TARGET_WATCOM)
    keymenu_s+24,
  #else
    keymenu_s+23,
@@ -374,7 +374,7 @@ LISTBOX miscmenu =
    15,                     /* slen */
    6,                      /* count */
    0, 0,
- #ifdef TARGET_DJGPP
+ #if (defined TARGET_DJGPP) || (defined TARGET_WATCOM)
    keymenu_s+34,
  #else
    keymenu_s+33,
@@ -396,7 +396,7 @@ LISTBOX toolmenu =
    15,                     /* slen */
    16,                     /* count */
    0, 0,
- #ifdef TARGET_DJGPP
+ #if (defined TARGET_DJGPP) || (defined TARGET_WATCOM)
    keymenu_s+40,
  #else
    keymenu_s+39,
@@ -427,7 +427,7 @@ LISTBOX configmenu =
    6,                      /* count */
    0, 0,
  #endif
- #ifdef TARGET_DJGPP
+ #if (defined TARGET_DJGPP) || (defined TARGET_WATCOM)
    keymenu_s+56,
  #else
    keymenu_s+55,
@@ -449,7 +449,7 @@ LISTBOX helpmenu =
    9,                      /* slen */
    3,                      /* count */
    0, 0,
- #ifdef TARGET_DJGPP
+ #if (defined TARGET_DJGPP) || (defined TARGET_WATCOM)
    keymenu_s+63,
  #elif (defined TARGET_CURSES) || (defined TARGET_WIN)
    keymenu_s+61,

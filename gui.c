@@ -487,7 +487,7 @@ LISTBOX filebox =
 typedef struct FILENODE
 {
    struct FILENODE *next;
-   char name[0];
+   char name[];
 } FILENODE;
 
 
@@ -566,7 +566,7 @@ void fill_filelist(char *path)
    int old;
 
    strcpy(b, path);
- #if (defined TARGET_DJGPP) || (defined TARGET_WIN)
+ #if (defined TARGET_DJGPP) || (defined TARGET_WIN) || (defined TARGET_WATCOM)
    strcpy(get_fname(b), "*.*");
  #else
    strcpy(get_fname(b), "*");

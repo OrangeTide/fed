@@ -43,7 +43,7 @@ BUFFER *find_kill_buffer()
    buffer[buffer_count++] = buf;
 
    strcpy(buf->name, "kill");
- #ifdef DJGPP
+ #if (defined DJGPP) || (defined TARGET_WATCOM)
    buf->flags = BUF_KILL;
  #else
    buf->flags = BUF_KILL | BUF_UNIX;

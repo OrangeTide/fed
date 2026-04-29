@@ -949,7 +949,7 @@ void browse(char *s)
    destroy_undolist(buf->redo);
 
    strcpy(buf->name, "browse");
- #ifdef DJGPP
+ #if (defined DJGPP) || (defined TARGET_WATCOM)
    buf->flags = BUF_BROWSE;
  #else
    buf->flags = BUF_BROWSE | BUF_UNIX;
@@ -1052,7 +1052,7 @@ void browse_goto(int direction, int e_flag)
    LINE *l;
    int line = 0;
    int col = 0;
-   char tmp[4][256];
+   char tmp[4][80];
    char *fname = NULL;
    static char last_fname[256] = "";
    static int last_line = 0;
@@ -1102,7 +1102,7 @@ void browse_goto(int direction, int e_flag)
 
    c = c2 = c3 = 0;
 
-   while ((c<buf->c_line->length) && (c<255) && (c2<4)) {
+   while ((c<buf->c_line->length) && (c<79) && (c2<4)) {
       if ((buf->c_line->text[c] == '\t') ||
 	  (buf->c_line->text[c] == ' ') ||
 	  (buf->c_line->text[c] == ',') ||

@@ -20,6 +20,11 @@
 #include <sys/stat.h>
 #endif
 
+#ifdef TARGET_WATCOM
+#include <dos.h>
+#endif
+
+
 #include "fed.h"
 
 
@@ -72,7 +77,7 @@ int scan_for_file(char *n, int depth)
       errno = 0;
 
       if (depth > 0) {
-      #if (defined TARGET_DJGPP) || (defined TARGET_WIN)
+      #if (defined TARGET_DJGPP) || (defined TARGET_WIN) || (defined TARGET_WATCOM)
 	 strcpy(get_fname(name), "*.*");
       #else
 	 strcpy(get_fname(name), "*");
@@ -122,7 +127,7 @@ int read_file(char *n, int flags)
 	 refresh_screen();
 
 	 strcpy(path, name);
-      #if (defined TARGET_DJGPP) || (defined TARGET_WIN)
+      #if (defined TARGET_DJGPP) || (defined TARGET_WIN) || (defined TARGET_WATCOM)
 	 strcpy(get_fname(path), "*.*");
       #else
 	 strcpy(get_fname(path), "*");
@@ -251,7 +256,7 @@ int do_the_read(char *n, int flags)
 	 errno=0;
 	 buf->flags |= BUF_NEW;
 	 buf->flags &= ~BUF_READONLY;
-    #ifndef DJGPP
+    #if !(defined DJGPP) && !(defined TARGET_WATCOM)
 	 buf->flags |= BUF_UNIX;
     #endif
 	 buf->start = buf->top = buf->c_line = create_line(0);
@@ -656,6 +661,8 @@ void run_tool(char *cmd, char *desc)
 
  #if (defined DJGPP) || (defined TARGET_WIN)
    int disk;
+ #elif (defined TARGET_WATCOM)
+   unsigned disk, total;
  #endif
 
    while ((*cmd) && (*cmd != '|'))        /* skip command menu description */
@@ -815,6 +822,8 @@ void run_tool(char *cmd, char *desc)
 
  #if (defined DJGPP) || (defined TARGET_WIN)
    disk = getdisk();
+ #elif (defined TARGET_WATCOM)
+   _dos_getdrive(&disk);
  #endif
 
    getcwd(path, 256);
@@ -831,6 +840,8 @@ void run_tool(char *cmd, char *desc)
 
  #if (defined DJGPP) || (defined TARGET_WIN)
    setdisk(disk);
+ #elif (defined TARGET_WATCOM)
+   _dos_setdrive(disk, &total);
  #endif
 
    if (file_size(ERROR_FILE) > 0) {

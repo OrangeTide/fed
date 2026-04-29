@@ -25,7 +25,11 @@
 #ifdef TARGET_WIN
    #include "iowin.h"
 #else
+#ifdef TARGET_WATCOM
+    #include "iowatcom.h"
+#else
    #error Unknown compile target
+#endif
 #endif
 #endif
 #endif
@@ -79,7 +83,6 @@ void pch(unsigned char c);
 void mywrite(char *s);
 void del_to_eol();
 void cr_scroll();
-void screen_block(int s_s, int s_o, int s_g, int d_s, int d_o, int d_g, int w, int h);
 char *save_screen(int x, int y, int w, int h);
 void restore_screen(int x, int y, int w, int h, char *buf);
 void clear_keybuf();

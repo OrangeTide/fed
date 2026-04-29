@@ -43,6 +43,9 @@ Introduction
    - configuration options to alter key bindings, screen colors, etc.
 
 What's new
+   Version 2.24 (February 2007)
+      - Robert Riebisch fixed `#...' handling in `makehelp' utility.
+
    Version 2.23 (November 2006)
       - Robert Riebisch fixed djgpp compile issue with function pch().
 

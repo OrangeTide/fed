@@ -542,7 +542,7 @@ void append_backslash(char *s)
    if (*s!=0) {
       p=s+strlen(s);
       if ((*(p-1)!='\\') && (*(p-1)!='/')) {
-   #if (defined TARGET_DJGPP) || (defined TARGET_WIN)
+   #if (defined TARGET_DJGPP) || (defined TARGET_WIN) || (defined TARGET_WATCOM)
 	 *p++='\\';
    #else
 	 *p++='/';
@@ -850,7 +850,7 @@ void my_fixpath(char *in, char *out)
 	 out[i] = '/';
 
    /* remove duplicate slashes */
- #ifdef TARGET_WIN
+ #if (defined TARGET_WIN) || (defined TARGET_WATCOM)
    if (strlen(out) > 2) {
       while ((p = strstr(out+1, "//")) != NULL)
 	 memmove(p, p+1, strlen(p));
@@ -914,7 +914,7 @@ void cleanup_filename(char *f)
 
 	 if (f[c] == '/')
 	    f[c] = '\\';
-   #elif defined TARGET_WIN
+   #elif (defined TARGET_WIN) || (defined TARGET_WATCOM)
 	 f[c] = b[c];
 
 	 if (f[c] == '/')
@@ -929,7 +929,7 @@ void cleanup_filename(char *f)
 
       f[c] = 0;
 
-   #ifdef TARGET_WIN
+   #if (defined TARGET_WIN) || (defined TARGET_WATCOM)
       if (f[1] == ':')
 	 f[0] = tolower(f[0]);
    #endif

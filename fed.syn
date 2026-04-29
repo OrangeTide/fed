@@ -1,7 +1,7 @@
 # syntax highlighting data for FED
 
 # ---------------- C/C++ ----------------
-Files=c,cpp,cxx,cc,h,hpp,inl,inc
+Files=c,cpp,cxx,cc,h,hpp,inl
 OpenComment1=/*
 CloseComment1=*/
 EOLComment1=//
@@ -10,7 +10,6 @@ Symbols=!&()*+,-./:;<=>?[]^{|}~
 String='"
 Escape=\
 Case=1
-RealTabs=0
 Indents=/*
 Keywords=asm,auto,break,case,catch,char,class,const,continue,default,delete
 Keywords=do,double,else,enum,except,extern,far,finally,float,for,friend,goto
@@ -23,35 +22,8 @@ Keywords=#line,#pragma,#undef,#warning,using,namespace,true,emit
 Keywords=s8,u8,s16,u16,s32,u32,s64,u64,s128,u128,f32,defined,explicit
 End
 
-# ---------------- C# ----------------
-Files=cs
-OpenComment1=/*
-CloseComment1=*/
-EOLComment1=//
-HexMarker=0x
-Symbols=!&()*+,-./:;<=>?[]^{|}~
-String='"
-Escape=\
-Case=1
-RealTabs=0
-Indents=/*
-Keywords=abstract,event,new,struct,as,explicit,null,switch,base
-Keywords=extern,object,this,bool,false,operator,throw,break
-Keywords=finally,out,true,byte,fixed,override,try,case,float
-Keywords=params,typeof,catch,for,private,uint,char,foreach
-Keywords=protected,ulong,checked,goto,public,unchecked
-Keywords=class,if,readonly,unsafe,const,implicit,ref,ushort
-Keywords=continue,in,return,using,decimal,int,sbyte,virtual
-Keywords=default,interface,sealed,volatile,delegate,internal
-Keywords=short,void,do,is,sizeof,while,double,lock,stackalloc
-Keywords=else,long,static,enum,namespace,string,true,false
-Keywords=new,as,is,sizeof,typeof,control,checked,unchecked
-Keywords=#if,#else,#elif,#endif,#define,#undef,#warning
-Keywords=#error,#line,#region,#endregion,partial
-End
-
 # ---------------- Pascal ----------------
-Files=pas
+Files=pas,inc
 OpenComment1={
 CloseComment1=}
 OpenComment2=(*
@@ -113,7 +85,7 @@ Keywords=window,xcopy,xor
 End
 
 # ---------------- 80x86 asm (AT&T syntax) ----------------
-Files=s
+Files=s,inc
 OpenComment1=/*
 CloseComment1=*/
 EOLComment1=#
@@ -356,7 +328,6 @@ OpenComment1=/*
 CloseComment1=*/
 EOLComment2=//
 String='"
-RealTabs=0
 Case=1
 Keywords=interface,true,false,vs,ps,1_1,1_3,1_4,2_0,3_0
 Keywords=D3DCOLORtoUBYTE4,abs,acos,all,any,asin,atan,atan2,ceil,clamp,clip,const
@@ -370,4 +341,27 @@ Keywords=tan,tanh,target,tex1D,tex1Dbias,tex1Dproj,tex2D,tex2Dbias,tex2Dproj
 Keywords=tex3D,tex3Dbias,tex3Dproj,texCUBE,texCUBEbias,texCUBEproj,transpose
 Keywords=typedef,uniform,vector,volatile,while,void,INPUT,OUTPUT,else
 Keywords=#define,#if,#ifdef,#ifndef,#else,#elif,#endif,#error,#undef,include
+End
+
+# ---------------- C# ----------------
+Files=cs
+OpenComment1=/*
+CloseComment1=*/
+EOLComment1=//
+HexMarker=0x
+Symbols=!&()*+,-./:;<=>?[]^{|}~
+String='"
+Escape=\
+Case=1
+Indents=/*
+Keywords=
+Keywords=abstract,event,new,struct,as,explicit,null,switch,base,extern,object
+Keywords=this,bool,false,operator,throw,break,finally,out,true,byte,fixed
+Keywords=override,try,case,float,params,typeof,catch,for,private,uint,char
+Keywords=foreach,protected,ulong,checked,goto,public,unchecked,class,if,readonly
+Keywords=unsafe,const,implicit,ref,ushort,continue,in,return,using,decimal,int
+Keywords=sbyte,virtual,default,interface,sealed,volatile,delegate,internal,short
+Keywords=void,do,is,sizeof,while,double,lock,stackalloc,else,long,static,enum
+Keywords=namespace,string,#if,#else,#elif,#endif,#define,#undef,#warning,#error
+Keywords=#line,#region,#endregion
 End

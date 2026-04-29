@@ -859,8 +859,10 @@ LISTITEM inputscreenheight_s[6] =
  #else
    { "25 lines",   25,  NULL, NULL, NULL },
    { "28 lines",   28,  NULL, NULL, NULL },
+ #ifndef TARGET_WATCOM
    { "35 lines",   35,  NULL, NULL, NULL },
    { "40 lines",   40,  NULL, NULL, NULL },
+ #endif
    { "43 lines",   43,  NULL, NULL, NULL },
    { "50 lines",   50,  NULL, NULL, NULL },
  #endif
@@ -871,11 +873,19 @@ LISTITEM inputscreenheight_s[6] =
 LISTBOX inputscreenheight =
 {
    NULL, "Screen height",
+ #ifdef TARGET_WATCOM
+   0, 0, 19, 8,            /* x, y, w, h */
+   2, 2,                   /* xoff, yoff */
+   1, 4,                   /* width, height */
+   13,                     /* slen */
+   4,                      /* count */
+ #else
    0, 0, 19, 10,           /* x, y, w, h */
    2, 2,                   /* xoff, yoff */
    1, 6,                   /* width, height */
    13,                     /* slen */
    6,                      /* count */
+ #endif
    0, 1,
    inputscreenheight_s,
    NULL, NULL, 
@@ -894,7 +904,7 @@ int input_screen_height()
    inputscreenheight.x = (screen_w-inputscreenheight.w)/2;
    inputscreenheight.y = (screen_h-inputscreenheight.h)/2;
 
-   for (c=0; c<6; c++)
+   for (c=0; c<inputscreenheight.count; c++)
       if (inputscreenheight_s[c].data == config.screen_height)
 	 inputscreenheight.current = c;
 

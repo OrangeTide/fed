@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
    if (get_fname(exe_path) == exe_path)
       if (search_path(exe_buf, exe_path, "", "PATH"))
 	 exe_path = exe_buf;
- #if (defined TARGET_DJGPP) || (defined TARGET_WIN)
+ #if (defined TARGET_DJGPP) || (defined TARGET_WIN) || (defined TARGET_WATCOM)
       else if (search_path(exe_buf, exe_path, "exe", "PATH"))
 	 exe_path = exe_buf;
  #endif
@@ -331,7 +331,7 @@ int main(int argc, char *argv[])
 
    sort_out_tools();
 
- #ifdef DJGPP
+ #if (defined DJGPP) || (defined TARGET_WATCOM)
    #define IS_OPTION(c)    ((c=='-') || (c=='/'))
    #define IS_FLAG(s, f)   ((stricmp(s, "-" f)==0) || (stricmp(s, "/" f)==0))
  #else

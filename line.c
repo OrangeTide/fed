@@ -1228,7 +1228,7 @@ int delete_chars(BUFFER *buf, int count, UNDO **undo)
 	    remove_fold(l);
 
 	 if ((next->line_no > 0) &&
-	     ((l->line_no <= 0) || (l->length < next->length)))
+	     ((l->line_no == 0) || (l->length < next->length)))
 	    l->line_no = next->line_no;
 
 	 if (!resize_line(l, l->length+next->length))

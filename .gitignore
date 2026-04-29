@@ -1,9 +1,12 @@
 # ignore editor junk
+.DS_Store
 *~
 .*.swp
+*.err
 
 # ignore build artifacts
 *.o
+*.exe
 /fed
 /fed.exe
 /help.c

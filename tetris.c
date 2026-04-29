@@ -75,7 +75,7 @@ void fn_tetris()
 	 count = 0;
 	 while (errno == 0) {
 	    record_name[count] = ~get_char(f);
-	    if ((record_name[count] > '9') || (record_name[count] < 0))
+	    if ((record_name[count] > '9') || (record_name[count] < '0'))
 	       break;
 	    count++;
 	 }
@@ -256,10 +256,12 @@ void draw_square(TETRIS *data, int x, int y, int col)
 {
    int xc, yc;
 
-   if (col)
+   if (col) {
       tattr(config.fold_col & 0xf0);
-   else
+   }
+   else {
       tattr(config.fold_col << 4);
+   }
 
    for (yc=0;yc<data->h;yc++) {
       goto1(data->x+x*data->w,data->y+yc+y*data->h);

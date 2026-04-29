@@ -1,7 +1,8 @@
 ################ FED makefile for GNU make ################
 
+HOSTCC ?= cc
+
 .PHONY: all default clean zip badtarget
-.PRECIOUS: %.o %.obj
 
 ################ what version to build? ################
 
@@ -14,36 +15,81 @@ else
 ifdef DJGPP
 TARGET = djgpp
 else
+ifdef DJDIR
+TARGET = djgpp
+else
+ifdef WATCOM
+TARGET = watcom
+else
 TARGET = curses
 endif
 endif
+endif
+endif
+endif
+
+################ choose file extensions ################
+
+ifeq ($(TARGET),win)
+MXE = .exe
+EXE = .exe
+else
+ifeq ($(TARGET),djgpp)
+MXE =
+EXE = .exe
+else
+ifeq ($(TARGET),watcom)
+MXE =
+EXE = .exe
+else
+MXE =
+EXE =
+endif
+endif
+endif
+
+ifeq ($(TARGET),win)
+OBJ = obj
+else
+OBJ = o
 endif
 
 ################ set the platform defines ################
 
 ifeq ($(TARGET),djgpp)
 fed$(EXE): CFLAGS += -DTARGET_DJGPP
+fed$(EXE): LDFLAGS =
 else
 ifeq ($(TARGET),win)
 fed$(EXE): CFLAGS += -DTARGET_WIN
 fed$(EXE): LDLIBS += user32.lib gdi32.lib shell32.lib winmm.lib advapi32.lib
 else
 ifeq ($(TARGET),curses)
-NCURSES_CFLAGS ?= $(shell pkg-config --cflags ncurses 2>/dev/null)
-NCURSES_LIBS ?= $(shell pkg-config --libs ncurses 2>/dev/null || echo -lncurses)
-fed$(EXE): CFLAGS += -DTARGET_CURSES $(NCURSES_CFLAGS)
+fed$(EXE): CFLAGS += -DTARGET_CURSES
 ifdef DJGPP
 fed$(EXE): LDLIBS += -lcurso
 else
+ifdef DJDIR
+fed$(EXE): LDLIBS += -lcurso
+else
+NCURSES_CFLAGS ?= $(shell pkg-config --cflags ncurses 2>/dev/null)
+NCURSES_LIBS ?= $(shell pkg-config --libs ncurses 2>/dev/null || echo -lncurses)
+fed$(EXE): CFLAGS += $(NCURSES_CFLAGS)
 fed$(EXE): LDLIBS += $(NCURSES_LIBS)
+endif
 endif
 else
 ifeq ($(TARGET),alleg)
 fed$(EXE): CFLAGS += -DTARGET_ALLEG
 fed$(EXE): LDLIBS += -lalleg
 else
+ifeq ($(TARGET),watcom)
+fed$(EXE): CFLAGS = -dTARGET_WATCOM -s -bcl=dos4g
+fed$(EXE): LDFLAGS = -s -bcl=dos4g
+else
 badtarget:
-	@echo Unknown compile target $(TARGET)! (expecting djgpp, curses, msvc, or alleg)
+	@echo Unknown compile target $(TARGET)! (expecting djgpp, curses, watcom, msvc, or alleg)
+endif
 endif
 endif
 endif
@@ -57,8 +103,8 @@ CC = cl
 EXEO = -Fe
 OBJO = -Fo
 
-CFLAGS = -nologo -W3 -WX -Gd -Ox -GB -MT
-LDFLAGS = -nologo
+CFLAGS += -nologo -W3 -WX -Gd -Ox -GB -MT
+LDFLAGS += -nologo
 
 ifdef DEBUGMODE
 CFLAGS += -Zi
@@ -66,37 +112,32 @@ LDFLAGS += -Zi
 endif
 
 else
+ifeq ($(TARGET),watcom)
+
+CC = wcl386
+EXEO = -fe=
+OBJO = -fo=
+
+CFLAGS += -s -bcl=dos4g
+LDFLAGS += -s -bcl=dos4g
+
+else
 
 CC = gcc
+
 EXEO = -o # trailing space
 OBJO = -o # trailing space
 
 ifdef DEBUGMODE
-CFLAGS = -g
-LDFLAGS =
+CFLAGS += -g
+LDFLAGS +=
 else
-CFLAGS = -Wall -O3 -fomit-frame-pointer
-LDFLAGS = -s
+CFLAGS += -Wall -O3 -fomit-frame-pointer
+LDFLAGS += -s
 endif
 
 endif
 
-################ choose file extensions ################
-
-ifeq ($(TARGET),win)
-EXE = .exe
-else
-ifdef DJGPP
-EXE = .exe
-else
-EXE =
-endif
-endif
-
-ifeq ($(TARGET),win)
-OBJ = obj
-else
-OBJ = o
 endif
 
 ################ list of what to build ################
@@ -124,12 +165,21 @@ OBJS := $(SRCS:.c=.$(OBJ))
 default: fed$(EXE)
 
 fed$(EXE) : $(OBJS)
+	$(CC) $(LDFLAGS) $(OBJS) $(EXEO)$@ $(LDLIBS)
 
-help.c: help.txt makehelp$(EXE)
-	./makehelp$(EXE) help.txt help.c
+help.c: help.txt makehelp$(MXE)
+	./makehelp$(MXE) help.txt help.c
 
-makehelp$(EXE): makehelp.c
-	$(CC) $(CFLAGS) -g $(LDFLAGS) $(EXEO)makehelp$(EXE) makehelp.c
+makehelp$(MXE): makehelp.c
+ifeq ($(TARGET),watcom)
+	$(HOSTCC) -Wall -O3 -fomit-frame-pointer -g -o makehelp makehelp.c
+else
+ifeq ($(TARGET),djgpp)
+	$(HOSTCC) -Wall -O3 -fomit-frame-pointer -g $(EXEO)makehelp$(MXE) makehelp.c
+else
+	$(CC) $(CFLAGS) -g $(LDFLAGS) $(EXEO)makehelp$(MXE) makehelp.c
+endif
+endif
 
 %.$(OBJ) : %.c fed.h io.h io$(TARGET).h
 	$(CC) $(CFLAGS) -c $< $(OBJO)$@
@@ -137,7 +187,7 @@ makehelp$(EXE): makehelp.c
 fed.res: fed.rc fed.ico wnd.ico
 	rc -fofed.res fed.rc
 
-clean : ; $(RM) $(OBJS) *.res *.pdb *.ilk help.c makehelp$(EXE)
+clean : ; $(RM) $(OBJS) *.res *.pdb *.ilk help.c makehelp$(MXE)
 
 ################ build distribution zips ################
 
@@ -151,7 +201,7 @@ ifeq ($(TARGET),win)
 	zip -9 fed/fed.zip fed/fed.mft
 	cd fed
 else
-ifdef DJGPP
+ifeq ($(TARGET),djgpp)
 	cp $(DJDIR)/bin/cwsdpmi.* .
 	cd ..
 	rm -f fed/fed.zip fed/fed.mft

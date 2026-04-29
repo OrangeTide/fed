@@ -12,13 +12,23 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 
+char *strltrim(const char *s)
+{
+  const char *p = s;
+
+  while (p[0] && p[1] && isspace(*p))
+     p++;
+  return (char*)p;
+}
 
 
 int main(int argc, char *argv[])
 {
    FILE *in, *out;
    char buf[256];
+   char *buf2;
    int len;
    int c;
    int line = 1;
@@ -68,8 +78,9 @@ int main(int argc, char *argv[])
 	 }
 	 buf[len] = 0;
 	 len = 0;
-	 if ((buf[0] == '#') || ((buf[0] == ' ') && (buf[1] == '#')))
-	    fprintf(out, "%s\n", buf);
+	 buf2 = strltrim(buf);
+	 if (*buf2 == '#')
+	    fprintf(out, "%s\n", buf2);
 	 else
 	    fprintf(out, "   \"%s\",\n", buf);
 	 line++;

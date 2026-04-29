@@ -1383,6 +1383,13 @@ int display_line(int y, LINE *l, int *comment_state)
 	    else if (x_pos == screen_w-1)
 	       _farpokew(dos_seg, SCRN_ADDR(x_pos, y_pos), (config.sel_col<<8)|'>');
 	    x_pos++;
+   #elif (defined TARGET_WATCOM)
+        uint16_t *p = (uint16_t *)SCRN_ADDR(x_pos, y_pos);
+	    if ((x_pos >= 0) && (x_pos < screen_w-1)) 
+	       *p = (attrib<<8)|' ';
+	    else if (x_pos == screen_w-1)
+	       *p = (config.sel_col<<8)|'>';
+	    x_pos++;
    #else
 	    if (x_pos == screen_w-1) {
 	       int a = attrib;
@@ -1402,6 +1409,13 @@ int display_line(int y, LINE *l, int *comment_state)
 	    _farpokew(dos_seg, SCRN_ADDR(x_pos, y_pos), (attrib<<8)|c);
 	 else if (x_pos == screen_w-1)
 	    _farpokew(dos_seg, SCRN_ADDR(x_pos, y_pos), (config.sel_col<<8)|'>');
+	 x_pos++;
+   #elif (defined TARGET_WATCOM)
+     uint16_t *p = (uint16_t *)SCRN_ADDR(x_pos, y_pos);
+	 if ((x_pos >= 0) && (x_pos < screen_w-1))
+	    *p = (attrib<<8)|c;
+	 else if (x_pos == screen_w-1)
+	    *p = (config.sel_col<<8)|'>';
 	 x_pos++;
    #else
 	 if (x_pos == screen_w-1) {
