@@ -23,6 +23,11 @@
 
 #include "fed.h"
 
+#ifdef TARGET_DOS16
+#define int386  int86
+#define int386x int86x
+#endif
+
 
 int screen_w = 80;
 int screen_h = 25;               /* screen dimensions */
@@ -34,7 +39,11 @@ int saved_lines = 0;
 char saved_vmode = 0;
 char fed_vmode = 0;
 char card_type = 0;
+#ifdef TARGET_DOS16
+unsigned char __far *video_base = MK_FP(0xB000, 0);
+#else
 int video_base = 0xb0000;
+#endif
 
 int mouse_state;
 int m_x = -1;
@@ -286,7 +295,11 @@ void cls()
 void get_term_info(struct term_info *info)
 {
    /* Read the video mode from the BIOS area */
-   info->videomode = *(char *)( 0x449 );   
+#ifdef TARGET_DOS16
+   info->videomode = *(char __far *)MK_FP(0x0040, 0x49);
+#else
+   info->videomode = *(char *)( 0x449 );
+#endif
    /* Read the screen width from the BIOS area */
    info->screenwidth = *(unsigned char*)( 0x44A );   
    if (card_type < 2) {
@@ -376,16 +389,28 @@ void term_init(int screenheight)
    
    if (saved_lines <= 0) {
       /* Read the video mode from the BIOS area */
+#ifdef TARGET_DOS16
+      saved_vmode = *(char __far *)MK_FP(0x0040, 0x49);
+#else
       saved_vmode = *(char *)( 0x449 );
-   
+#endif
+
       if (saved_vmode == 7) {
          /* Monochrome video card */
+#ifdef TARGET_DOS16
+         video_base = MK_FP(0xB000, 0);
+#else
          video_base = 0xb0000;
+#endif
          fed_vmode = 7;
          card_type = 0;    /* MDA */
       } else {
          /* Color video card */
+#ifdef TARGET_DOS16
+         video_base = MK_FP(0xB800, 0);
+#else
          video_base = 0xb8000;
+#endif
          fed_vmode = 3;
     
          /* See if is EGA or VGA. */
@@ -726,7 +751,7 @@ int flush_buffer(MYFILE *f)
 
 
 
-int file_size(char *p)
+long file_size(char *p)
 {
    struct find_t dta;
 
@@ -919,7 +944,11 @@ void windows_init()
 
          int386(0x2F, &r, &r);
 
+#ifdef TARGET_DOS16
+         _fmemcpy(orig_title, MK_FP(seg, 0), sizeof(orig_title));
+#else
          memcpy(orig_title, (char *)(seg*16), sizeof(orig_title));
+#endif
          
          _dos_freemem(seg);
       }
@@ -949,7 +978,11 @@ int set_window_title(char *title)
    if (_dos_allocmem((256+15)>>4, &seg) != 0)
       return FALSE;
       
+#ifdef TARGET_DOS16
+   buf = (char __far *)MK_FP(seg, 0);
+#else
    buf = (char *)(seg*16);
+#endif
       
    if (orig_title[0]) {
       strcpy(buf, orig_title);
@@ -999,7 +1032,7 @@ int got_clipboard_data()
    r.w.dx = 1;
    int386(0x2F, &r, &r);
 
-   size = (r.w.dx<<16) | r.w.ax;
+   size = ((long)r.w.dx << 16) | (unsigned)r.w.ax;
 
    r.w.ax = 0x1708;
    int386(0x2F, &r, &r);
@@ -1032,14 +1065,18 @@ int set_clipboard_data(char *data, int size)
       ret = FALSE;
    }
    else {
+#ifdef TARGET_DOS16
+      _fmemcpy(MK_FP(seg, 0), data, size);
+#else
       memcpy((char *)(seg*16), data, size);
+#endif
 
       r.w.ax = 0x1703;
       r.w.dx = 1;
       segread(&sr);
       sr.es = seg;
       r.w.bx = 0;
-      r.w.si = size>>16;
+      r.w.si = (unsigned long)size >> 16;
       r.w.cx = size&0xFFFF;
 
       int386x(0x2F, &r, &r, &sr);
@@ -1078,7 +1115,7 @@ char *get_clipboard_data(int *size)
    r.w.dx = 1;
    int386(0x2F, &r, &r);
 
-   *size = (r.w.dx<<16) | r.w.ax;
+   *size = ((long)r.w.dx << 16) | (unsigned)r.w.ax;
 
    if (*size > 0) {
       if (_dos_allocmem((*size+15)>>4, &seg) == 0) {
@@ -1094,7 +1131,11 @@ char *get_clipboard_data(int *size)
             ret = malloc(*size);
 
          if (ret)
+#ifdef TARGET_DOS16
+             _fmemcpy(ret, MK_FP(seg, 0), *size);
+#else
              memcpy(ret, (char*)(seg*16), *size);
+#endif
          }
 
          _dos_freemem(seg);

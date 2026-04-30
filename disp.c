@@ -10,6 +10,7 @@
 
 
 #include <ctype.h>
+#include <limits.h>
 #include <time.h>
 
 #include "fed.h"
@@ -1201,7 +1202,7 @@ int display_line(int y, LINE *l, int *comment_state)
    int tpos;                           /* position including tabs */
    int vid = 0;                        /* color flags */
    int old_vid = 0;                    /* previous color flags */
-   int start_sel = 0xffff;             /* start column for sel vid */
+   int start_sel = INT_MAX;             /* start column for sel vid */
    int end_sel = -1;                   /* finish column for sel vid */
    SYNTAX *syn = buffer[0]->syntax;    /* save a ptr lookup */
    unsigned char c = 0;
@@ -1227,7 +1228,7 @@ int display_line(int y, LINE *l, int *comment_state)
       if (l != ss)
 	 start_sel = 0;
       if (l != se)
-	 end_sel = 0xffff;
+	 end_sel = INT_MAX;
    }
 
    if (*comment_state != COMMENT_NONE)                /* in a comment? */

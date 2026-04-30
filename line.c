@@ -770,7 +770,7 @@ static_inline unsigned long undo_read_int(UNDO *u)
    int w3 = u->data[--u->length];
    int w4 = u->data[--u->length];
 
-   return ((w1 << 24) | (w2 << 16) | (w3 << 8) | (w4));
+   return (((unsigned long)w1 << 24) | ((unsigned long)w2 << 16) | (w3 << 8) | w4);
 }
 
 

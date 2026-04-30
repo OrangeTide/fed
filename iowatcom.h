@@ -24,6 +24,7 @@
 
 #include <stdio.h>
 #include <bios.h>
+#include <i86.h>
 #include <io.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -61,14 +62,22 @@ extern int screen_h;
 extern int x_pos, y_pos;
 extern int attrib;
 extern int norm_attrib;
+#ifdef TARGET_DOS16
+extern unsigned char __far *video_base;
+#else
 extern int video_base;
+#endif
 
 #define gch()           _bios_keybrd(_KEYBRD_READ)                               /* 'raw' character input */
 #define ascii(c)        ((c) & 0x00ff)                                           /* convert raw to ascii */
 #define keypressed()    (_bios_keybrd(_KEYBRD_READY)!=0)                         /* are characters waiting? */
 #define modifiers()     (_bios_keybrd(_KEYBRD_SHIFTSTATUS))                      /* read shift, ctrl + alt */
 #define ctrl_pressed()  (modifiers() & 4)                                        /* is the ctrl key pressed? */
-#define alt_pressed()   ((modifiers() & 8) && !(*(char *)(1174) & 8))            /* is the alt key pressed? */
+#ifdef TARGET_DOS16
+#define alt_pressed()   ((modifiers() & 8) && !(*(char __far *)MK_FP(0x0040, 0x96) & 8))
+#else
+#define alt_pressed()   ((modifiers() & 8) && !(*(char *)(1174) & 8))
+#endif
 #define print(c)        _bios_printer(0,0,c)                                     /* print a character */
 #define printer_ready() (TRUE)                                                   /* is there a printer? */
 void cls();
@@ -121,7 +130,7 @@ typedef struct MYFILE     /* we implement our own files: faster than stdio */
 {
    int f_hndl;                  /* DOS file handle */
    int f_mode;                  /* read or write flag */
-   unsigned int f_size;         /* number of bytes yet to be read */
+   unsigned long f_size;        /* number of bytes yet to be read */
    unsigned char *f_buf_pos;    /* current position in buffer */
    unsigned char *f_buf_end;    /* end of the buffer */
    unsigned char f_buf[BUFFER_SIZE];
@@ -147,7 +156,7 @@ typedef struct MYFILE     /* we implement our own files: faster than stdio */
 
 #define delete_file(p)      unlink(p)
 
-int file_size(char *p);
+long file_size(char *p);
 
 #define file_exists(p)      (file_size(p) >= 0)
 
