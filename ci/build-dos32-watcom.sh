@@ -1,5 +1,5 @@
 #!/bin/sh
-# Cross-compile an MS-DOS (DOS4GW) binary using Open Watcom.
+# Cross-compile an MS-DOS 32-bit (DOS32A) binary using Open Watcom.
 #
 # Toolchain requirements:
 #   - Open Watcom v2 (github.com/open-watcom/open-watcom-v2)
@@ -9,7 +9,7 @@
 #   WATCOM   - Open Watcom installation   (required)
 #   CC       - Watcom C compiler          (default: wcc386)
 #   HOSTCC   - host C compiler            (default: gcc)
-#   BUILDDIR - output directory           (default: build/dos-watcom)
+#   BUILDDIR - output directory           (default: build/dos32-watcom)
 #
 # Note: we deliberately omit -i=. to avoid the project's io.h shadowing
 # Watcom's system <io.h>. wcc386 finds project headers via "" includes
@@ -18,7 +18,7 @@ set -e
 
 CC="${CC:-wcc386}"
 HOSTCC="${HOSTCC:-gcc}"
-BUILDDIR="${BUILDDIR:-build/dos-watcom}"
+BUILDDIR="${BUILDDIR:-build/dos32-watcom}"
 
 [ -n "$WATCOM" ] || { echo "error: WATCOM env var not set" >&2; exit 1; }
 export INCLUDE="$WATCOM/h"
@@ -49,6 +49,6 @@ for src in $SRCS; do
 	OBJS="${OBJS:+$OBJS,}$BUILDDIR/${src%.c}.o"
 done
 
-wlink system dos4g name "$BUILDDIR/fed.exe" file "$OBJS"
+wlink system dos32a name "$BUILDDIR/fed.exe" file "$OBJS"
 
 echo "Built: $BUILDDIR/fed.exe"

@@ -104,8 +104,8 @@ jobs:
           name: fed-windows-x86
           path: dist/fed-win32.zip
 
-  msdos:
-    name: MS-DOS (DJGPP)
+  msdos32-djgpp:
+    name: MS-DOS 32-bit (DJGPP)
     runs-on: ubuntu-latest
     env:
       # https://github.com/andrewwutw/build-djgpp/releases
@@ -118,16 +118,16 @@ jobs:
           curl -fsSL "$DJGPP_URL" | sudo tar xjf - -C /usr/local
           echo "/usr/local/djgpp/bin" >> "$GITHUB_PATH"
       - name: Build
-        run: ci/build-dos-djgpp.sh
+        run: ci/build-dos32-djgpp.sh
       - name: Package
-        run: ci/package-dos.sh
+        run: ci/package-dos32-djgpp.sh
       - uses: actions/upload-artifact@v4
         with:
-          name: fed-msdos
-          path: dist/fed-dos.zip
+          name: fed-dos32-djgpp
+          path: dist/fed-dos32-djgpp.zip
 
-  msdos-watcom:
-    name: MS-DOS (Open Watcom)
+  msdos32-watcom:
+    name: MS-DOS 32-bit (Open Watcom)
     runs-on: ubuntu-latest
     env:
       WATCOM_URL: https://github.com/open-watcom/open-watcom-v2/releases/download/2026-04-01-Build/ow-snapshot.tar.xz
@@ -142,18 +142,18 @@ jobs:
           WATCOM: /usr/local/watcom
         run: |
           export PATH="$WATCOM/binl64:$WATCOM/binw:$PATH"
-          sh ci/build-dos-watcom.sh
+          sh ci/build-dos32-watcom.sh
       - name: Package
-        run: sh ci/package-dos-watcom.sh
+        run: sh ci/package-dos32-watcom.sh
       - uses: actions/upload-artifact@v4
         with:
-          name: fed-msdos-watcom
-          path: dist/fed-dos-watcom.zip
+          name: fed-dos32-watcom
+          path: dist/fed-dos32-watcom.zip
 
   release:
     name: Create release
     if: startsWith(github.ref, 'refs/tags/rel/')
-    needs: [linux-x86_64, linux-arm64, linux-arm32, windows-x86_64, windows-x86, msdos, msdos-watcom]
+    needs: [linux-x86_64, linux-arm64, linux-arm32, windows-x86_64, windows-x86, msdos32-djgpp, msdos32-watcom]
     runs-on: ubuntu-latest
     environment: release
     permissions:
@@ -211,5 +211,5 @@ jobs:
             artifacts/fed-linux-arm32/* \
             artifacts/fed-windows-x86_64/* \
             artifacts/fed-windows-x86/* \
-            artifacts/fed-msdos/* \
-            artifacts/fed-msdos-watcom/*
+            artifacts/fed-dos32-djgpp/* \
+            artifacts/fed-dos32-watcom/*

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Cross-compile an MS-DOS binary using DJGPP.
+# Cross-compile an MS-DOS 32-bit binary using DJGPP.
 #
 # Toolchain requirements:
 #   - DJGPP cross-compiler (e.g. from github.com/andrewwutw/build-djgpp)
@@ -8,13 +8,13 @@
 #   CROSS    - toolchain prefix        (default: i586-pc-msdosdjgpp-)
 #   CC       - target C compiler       (default: ${CROSS}gcc)
 #   HOSTCC   - host C compiler         (default: gcc)
-#   BUILDDIR - output directory        (default: build/dos)
+#   BUILDDIR - output directory        (default: build/dos32-djgpp)
 set -e
 
 CROSS="${CROSS:-i586-pc-msdosdjgpp-}"
 CC="${CC:-${CROSS}gcc}"
 HOSTCC="${HOSTCC:-gcc}"
-BUILDDIR="${BUILDDIR:-build/dos}"
+BUILDDIR="${BUILDDIR:-build/dos32-djgpp}"
 
 command -v "$CC" >/dev/null 2>&1 || { echo "error: $CC not found" >&2; exit 1; }
 command -v "$HOSTCC" >/dev/null 2>&1 || { echo "error: $HOSTCC (host compiler) not found" >&2; exit 1; }
